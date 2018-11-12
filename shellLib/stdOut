@@ -1,5 +1,11 @@
 # Source this file to bring function into environment
-#
+
+# Avoid double inclusion
+if [ "${stdOutImported}X" != "X" ]; then
+    return 0
+fi
+stdOutImported=1
+
 # -------------------------------------------------------
 #
 # Output text to standard out.
@@ -16,6 +22,33 @@ stdOut()
 stdErr()
 {
     echo "$*" 1>&2
+}
+
+# -------------------------------------------------------
+#
+# Output message to standard out prefaced by INFO.
+#
+stdInfo()
+{
+    echo "[INFO]  $*"
+}
+
+# -------------------------------------------------------
+#
+# Output message to standard out prefaced by WARN
+#
+stdWarn()
+{
+    echo "[WARN]  $*"
+}
+
+# -------------------------------------------------------
+#
+# Output message to standard error prefaced by ERROR
+#
+stdError()
+{
+    echo "[ERROR] $*" 1>&2
 }
 
 # -------------------------------------------------------

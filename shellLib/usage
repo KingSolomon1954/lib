@@ -1,5 +1,12 @@
 # Source this file to bring function into environment
 #
+
+# Avoid double inclusion
+if [ "${usageImported}X" != "X" ]; then
+    return 0
+fi
+usageImported=1
+
 # -------------------------------------------------------
 #
 # Output usage.
