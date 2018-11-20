@@ -1,10 +1,8 @@
-# Source this file to bring function into environment
+# Source this file to bring functions into environment
 
 # Avoid double inclusion
-if [ "${stdOutImported}X" != "X" ]; then
-    return 0
-fi
-stdOutImported=1
+[[ -v libStdOutImported ]] && return 0
+libStdOutImported=1
 
 # -------------------------------------------------------
 #

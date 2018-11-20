@@ -1,10 +1,8 @@
 # Source this file to bring function into environment
-
+#
 # Avoid double inclusion
-if [ "${dirNameImported}X" != "X" ]; then
-    return 0
-fi
-dirNameImported=1
+[[ -v libDirNameImported ]] && return 0
+libDirNameImported=1
 
 # -----------------------------------------------------------
 

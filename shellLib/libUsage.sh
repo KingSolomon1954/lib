@@ -1,15 +1,12 @@
 # Source this file to bring function into environment
 #
-
 # Avoid double inclusion
-if [ "${usageImported}X" != "X" ]; then
-    return 0
-fi
-usageImported=1
+[[ - v libUsageImported ]] && return 0
+libUsageImported=1
 
 # -------------------------------------------------------
 #
-# Output usage.
+# Output usage from section in prolog.
 #
 usage()
 {

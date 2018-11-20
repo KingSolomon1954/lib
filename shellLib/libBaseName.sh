@@ -1,10 +1,8 @@
 # Source this file to bring function into environment
 
 # Avoid double inclusion
-if [ "${baseNameImported}X" != "X" ]; then
-    return 0
-fi
-baseNameImported=1
+[[ -v libBaseNameImported ]] && return 0
+libBaseNameImported=1
 
 # -----------------------------------------------------------
 

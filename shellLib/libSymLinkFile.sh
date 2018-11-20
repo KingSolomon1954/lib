@@ -1,10 +1,8 @@
 # Source this file to bring function into environment
 #
 # Avoid double inclusion
-if [ "${symlinkFileImported}X" != "X" ]; then
-    return 0
-fi
-symlinkFileImported=1
+[[ - v libSymlinkFileImported ]] && return 0
+libSymlinkFileImported=1
 
 # -----------------------------------------------------------
 #
