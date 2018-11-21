@@ -34,7 +34,7 @@ isInPath()
 # with ":" separating individual elements.
 #
 # Example:
-#     append $HOME/man MANPATH
+#     appendToPath $HOME/man MANPATH
 #
 appendToPath ()
 {
@@ -51,6 +51,9 @@ appendToPath ()
 # given path variable. $2 is a path style variable 
 # with ":" separating individual elements.
 #
+# Example:
+#     prependToPath $HOME/man MANPATH
+#
 prependToPath ()
 {
     if isInPath "$1" "$2"; then
@@ -65,9 +68,12 @@ prependToPath ()
 # Delete $1 from $2. $2 is a path style variable
 # with ":" separating individual elements.
 #
+# Example:
+#     deleteFromPath $HOME/man MANPATH
+#
 deleteFromPath ()
 {
-    eval ${2}="\${${2}//'$1'/}"  # Sub it out
+    eval ${2}="\${${2}//'${1}'/}"  # Sub it out
     colonTrimPath ${2}
 }
 
