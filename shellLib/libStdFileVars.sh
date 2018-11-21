@@ -4,12 +4,15 @@
 [[ -v libStdFileVarsImported ]] && return 0
 libStdFileVarsImported=1
 
-import libDirName.sh
 import libBaseName.sh
 
 # -----------------------------------------------------------
 
-# Set file variables useful in many scripts
+# Set file variables to where the script resides.
+#
+# Attempts to set these variables to where the script resides.
+# Note that there is no promise that $0 will work in all cases.
+# Refer to web discussions regarding finding script location.
 
 _scriptDir=$(cd "$(dirName $0)" && pwd)
 _scriptFile="$(baseName "$0")"
