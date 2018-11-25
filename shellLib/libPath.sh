@@ -1,5 +1,9 @@
 # Source this file to bring function into environment
-
+#
+# Functions to manipulate shell PATH like variables.
+# You know the variables with entries separated by ":" such
+# as #$PATH itself.
+#
 # Avoid double inclusion
 [[ -v libPathImported ]] && return 0
 libPathImported=1
