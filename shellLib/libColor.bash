@@ -1,5 +1,7 @@
 
 
+# See https://stackoverflow.com/questions/4842424/list-of-ansi-color-escape-sequences
+
 # See git clone --depth=1 https://github.com/Bash-it/bash-it.git
 # then bash-it/themes/colors.theme.bash
 

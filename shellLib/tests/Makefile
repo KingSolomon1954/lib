@@ -2,7 +2,8 @@
 
 
 UNIT_TESTS := \
-	libPathTest.sh
+	libPathTest.bash \
+	libStringTest.bash
 
 runtests:
 	bash_unit $(UNIT_TESTS)

@@ -2,7 +2,7 @@
 
 # set -o xtrace   # for debugging
 
-import libPath.sh
+import libPath.bash
 
 # -----------------------------------------------------------
 
