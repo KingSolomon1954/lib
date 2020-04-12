@@ -19,37 +19,182 @@ strlen ()
 }
 
 # -----------------------------------------------------------
-# 
-#  -- Method: str.isalnum ()
-# 
-#      Return true if all characters in the string are alphanumeric and
-#      there is at least one character, false otherwise.  A character ‘c’
-#      is alphanumeric if one of the following returns ‘True’:
-#      ‘c.isalpha()’, ‘c.isdecimal()’, ‘c.isdigit()’, or ‘c.isnumeric()’.
-# 
-#  -- Method: str.isalpha ()
-# 
-#      Return true if all characters in the string are alphabetic and
-#      there is at least one character, false otherwise.  Alphabetic
-#      characters are those characters defined in the Unicode character
-#      database as “Letter”, i.e., those with general category property
-#      being one of “Lm”, “Lt”, “Lu”, “Ll”, or “Lo”.  Note that this is
-#      different from the “Alphabetic” property defined in the Unicode
-#      Standard.
-# 
+#
+# Return true if all characters in the string are alphanumeric as
+# defined by POSIX standard.
+#
+isAlphNum()
+{
+    local pat='^[[:alnum:]]+$'
+    [[ ${1} =~ ${pat} ]]
+}
+
+# -----------------------------------------------------------
+#
+# Return true if all characters in the string are alpha as defined by
+# POSIX standard.
+#
+isAlpha()
+{
+    local pat='^[[:alpha:]]+$'
+    [[ ${1} =~ ${pat} ]]
+}
+
+# -----------------------------------------------------------
+#
+# Return true if all characters in the string are ASCII chars as defined
+# by POSIX standard.
+#
+# ASCII is not currently working. Need to investigate.
+#
+# isAscii()
+# {
+#     local pat='^[[:ascii:]]+$'
+#     [[ ${1} =~ ${pat} ]]
+# }
+
+# -----------------------------------------------------------
+#
+# Return true if all characters in the string are blank as
+# defined by POSIX standard.
+#
+isBlank()
+{
+    local pat='^[[:blank:]]+$'
+    [[ ${1} =~ ${pat} ]]
+}
+
+# -----------------------------------------------------------
+#
+# Return true if all characters in the string are control characters as
+# defined by POSIX standard.
+#
+isCntrl()
+{
+    local pat='^[[:cntrl:]]+$'
+    [[ ${1} =~ ${pat} ]]
+}
+
 # -----------------------------------------------------------
 #
 # Return true if all characters in the string are digits as defined by
-# POSIX standard. Note that a string like this valid '123-+-+45'.
+# POSIX standard. Note that "+" "-" "." are not digits.
 #
 isDigit()
 {
-    case "$1" in
-        *[[:digit:]]*)     echo 1; return 0;; # fail
-        *)              echo 2; return 1;; # fail
-    esac
+    local pat='^[[:digit:]]+$'
+    [[ ${1} =~ ${pat} ]]
 }
 
+# -----------------------------------------------------------
+#
+# Return true if all characters in the string are in the graph class
+# (displayable on a screen) as defined by POSIX standard.
+#
+isGraph()
+{
+    local pat='^[[:graph:]]+$'
+    [[ ${1} =~ ${pat} ]]
+}
+
+# -----------------------------------------------------------
+#
+# Return true if all characters in the string are lowercase as
+# defined by POSIX standard.
+#
+isLower()
+{
+    local pat='^[[:lower:]]+$'
+    [[ ${1} =~ ${pat} ]]
+}
+
+# -----------------------------------------------------------
+#
+# Return true if the string forms a valid integer meaning all digits
+# with an optional preceding +/-. Does not check for length.
+#
+isInteger()
+{
+    local pat='^[+-]?[[:digit:]]+$'
+    [[ ${1} =~ ${pat} ]]
+}
+
+# -----------------------------------------------------------
+#
+# Return true if all characters in the string are printable as
+# defined by POSIX standard.
+#
+isPrint()
+{
+    local pat='^[[:print:]]+$'
+    [[ ${1} =~ ${pat} ]]
+}
+
+# -----------------------------------------------------------
+#
+# Return true if all characters in the string are punctuations as
+# defined by POSIX standard.
+#
+isPunct()
+{
+    local pat='^[[:punct:]]+$'
+    [[ ${1} =~ ${pat} ]]
+}
+
+# -----------------------------------------------------------
+#
+# Return true if all characters in the string are spaces as
+# defined by POSIX standard.
+#
+isSpace()
+{
+    local pat='^[[:space:]]+$'
+    [[ ${1} =~ ${pat} ]]
+}
+
+# -----------------------------------------------------------
+#
+# Return true if all characters in the string are uppercase as
+# defined by POSIX standard.
+#
+isUpper()
+{
+    local pat='^[[:upper:]]+$'
+    [[ ${1} =~ ${pat} ]]
+}
+
+# -----------------------------------------------------------
+#
+# Return true if all characters in the string are considered a
+# word - containing only letters, digits, and the character _.
+#
+# isWord is not currently working. Need to investigate.
+#
+# isWord()
+# {
+#     local pat='^[[:word:]]+$'
+#     [[ ${1} =~ ${pat} ]]
+# }
+
+# -----------------------------------------------------------
+#
+# Return true if all characters in the string are valid hexadecimal
+# digits.
+#
+isXdigit()
+{
+    local pat='^[[:xdigit:]]+$'
+    [[ ${1} =~ ${pat} ]]
+}
+
+# -----------------------------------------------------------
+#
+#     local -i rv=$?
+#     if (( ${rv} > 1 )); then
+#         echo "bad regex syntax"
+#     fi
+#     return ${rv}
+#
 # -----------------------------------------------------------
 
 
