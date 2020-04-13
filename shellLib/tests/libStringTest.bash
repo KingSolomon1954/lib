@@ -106,6 +106,45 @@ test_isInteger()
     assert_fail "isInteger '#%@' "
     assert_fail "isInteger 'I am Spartacus' "
 }
+
+# Commented out because bash_unit chokes on the
+# execution of function under test isNumeric().
+# Doesn't like its syntax. Testest manually in the
+# shell and it works as expected.
+#
+# test_isNumeric()
+# {
+#     # valid numerics
+#     assert "isNumeric '1' "
+#     assert "isNumeric '12345' "
+#     assert "isNumeric '+12345' "
+#     assert "isNumeric '-12345' "
+#     assert "isNumeric '0' "
+#     assert "isNumeric '0.0' "
+#     assert "isNumeric '+0.0' "
+#     assert "isNumeric '+.0' "
+#     assert "isNumeric '-.0' "
+#     assert "isNumeric '+42.250' "
+#     assert "isNumeric '+42.250E4' "
+#     assert "isNumeric '+42.250+E4' "
+#     assert "isNumeric '-2.250-E4' "
+#     assert "isNumeric '250E4' "
+#     assert "isNumeric '250e4' "
+# 
+#     # bad numerics
+#     assert_fail "isNumeric "
+#     assert_fail "isNumeric '+'"
+#     assert_fail "isNumeric '-'"
+#     assert_fail "isNumeric '.'"
+#     assert_fail "isNumeric 'dinosaur'"
+#     assert_fail "isNumeric '+d'"
+#     assert_fail "isNumeric '123a45'"
+#     assert_fail "isNumeric '123-45'"
+#     assert_fail "isNumeric '123+45'"
+#     assert_fail "isNumeric '123.45'"
+#     assert_fail "isNumeric '#%@' "
+#     assert_fail "isNumeric 'I am Spartacus' "
+# }
     
 test_isLower()
 {

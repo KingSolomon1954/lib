@@ -1,6 +1,26 @@
-# Source this file to bring functions into environment
+# -----------------------------------------------------------
 #
 # Functions to manipulate shell strings.
+#
+# Source this file to bring functions into environment
+#
+# List of functions
+#     strlen()
+#     isAlphNum()
+#     isAlpha()
+#     # isAscii()
+#     isBlank()
+#     isCntrl()
+#     isDigit()
+#     isGraph()
+#     isLower()
+#     isInteger()
+#     isPrint()
+#     isPunct()
+#     isSpace()
+#     isUpper()
+#     # isWord()
+#     isXdigit()
 #
 # Avoid double inclusion
 [[ -v libStringImported ]] && return 0
@@ -121,6 +141,24 @@ isInteger()
 
 # -----------------------------------------------------------
 #
+# Return true if the string forms a valid integer or floating point
+# number meaning digits with optional preceding +/- and optional decimal
+# point and optional E to +/- exponent. Does not check for length.
+# From: jrmartin@rainey.blueneptune.com (James R. Martin)
+#
+# 
+isNumeric()
+{
+    local p1='?([-+])+([[:digit:]])?(.)*([[:digit:]])?([Ee]?([-+])+([[:digit:]]))'
+    local p2='?([-+])*([[:digit:]])?(.)+([[:digit:]])?([Ee]?([-+])+([[:digit:]]))'
+    case $1 in
+        $p1 ) return 0;;
+        $p2 ) return 0;;
+    *) return 1;;
+    esac
+}
+# -----------------------------------------------------------
+#
 # Return true if all characters in the string are printable as
 # defined by POSIX standard.
 #
@@ -198,35 +236,6 @@ isXdigit()
 # -----------------------------------------------------------
 
 
-# 
-#  -- Method: str.isnumeric ()
-# 
-#      Return true if all characters in the string are numeric characters,
-#      and there is at least one character, false otherwise.  Numeric
-#      characters include digit characters, and all characters that have
-#      the Unicode numeric value property, e.g.  U+2155, VULGAR FRACTION
-#      ONE FIFTH. Formally, numeric characters are those with the property
-#      value Numeric_Type=Digit, Numeric_Type=Decimal or
-#      Numeric_Type=Numeric.
-# 
-# -- Method: str.isspace ()
-# 
-#      Return true if there are only whitespace characters in the string
-#      and there is at least one character, false otherwise.  Whitespace
-#      characters are those characters defined in the Unicode character
-#      database as “Other” or “Separator” and those with bidirectional
-#      property being one of “WS”, “B”, or “S”.
-# 
-#  -- Method: str.isupper ()
-# 
-#      Return true if all cased characters (2) in the string are uppercase
-#      and there is at least one cased character, false otherwise.
-# 
-#  -- Method: str.islower ()
-# 
-#      Return true if all cased characters (1) in the string are lowercase
-#      and there is at least one cased character, false otherwise.
-# 
 #  -- Method: str.startswith (prefix[, start[, end]])
 # 
 #      Return ‘True’ if string starts with the `prefix', otherwise return
