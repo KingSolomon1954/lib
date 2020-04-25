@@ -10,21 +10,24 @@ libPathImported=1
 
 # -----------------------------------------------------------
 #
-# True if $1 is contained $2.
+# True if string $1 is contained in path style variable $2.
+# 
 # Returns 0 (success) if found otherwise 1 (fail).
-# $2 is a path style variable with ":" separating
-# individual elements.
+# $1 is passed by value.
+# $2 is the variable name of a path style variable
+# expecting ":" separating individual elements.
 #
 # Example:
 #     if isInPath /usr/bin PATH; then
 #         echo "Yes in PATH"
-#     else
-#         echo "Not in PATH"
 #     fi
 #
 isInPath()
 {
-    local v=$(eval echo \$${2})
+    [[ $# -lt 2 ]]   && return 2 # return error, missing args
+    [[ ${#1} == 0 ]] && return 2 # return error, empty 1st arg
+    [[ ${#2} == 0 ]] && return 2 # return error, empty 2nd arg
+    local -nr v=$2
     case ":${v}:" in
         *":$1:"*) return 0;;  # Found
         *)        return 1;;  # Not found
@@ -34,19 +37,23 @@ isInPath()
 # -----------------------------------------------------------
 #
 # Append $1 to $2 provided $1 is not already in the
-# given path variable. $2 is a path style variable
-# with ":" separating individual elements.
+# given path variable. $2 is the variable name of a path 
+# style variable with ":" separating individual elements.
 #
 # Example:
 #     appendToPath $HOME/man MANPATH
 #
 appendToPath ()
 {
-    if isInPath "$1" "$2"; then
+    if isInPath "${1}" ${2}; then
         return 0
     fi
-    eval ${2}="\$${2}:\"$1\""
-    colonTrimPath ${2}
+    [[ $# -lt 2 ]]   && return 2 # return error, missing args
+    [[ ${#1} == 0 ]] && return 2 # return error, empty 1st arg
+    [[ ${#2} == 0 ]] && return 2 # return error, empty 2nd arg
+    local -n v=$2
+    v="${v}:$1"
+    colonTrimPath $2
 }
 
 # -----------------------------------------------------------
@@ -60,24 +67,32 @@ appendToPath ()
 #
 prependToPath ()
 {
-    if isInPath "$1" "$2"; then
+    if isInPath "$1" ${2}; then
         return 0
     fi
-    eval ${2}="\"$1\":\$${2}"
+    [[ $# -lt 2 ]]   && return 2 # return error, missing args
+    [[ ${#1} == 0 ]] && return 2 # return error, empty 1st arg
+    [[ ${#2} == 0 ]] && return 2 # return error, empty 2nd arg
+    local -n v=$2
+    v="$1:${v}"
     colonTrimPath ${2}
 }
 
 # -----------------------------------------------------------
 #
-# Delete $1 from $2. $2 is a path style variable
-# with ":" separating individual elements.
+# Delete $1 from $2. $2 is the name of a path style 
+# variable with ":" separating individual elements.
 #
 # Example:
 #     deleteFromPath $HOME/man MANPATH
 #
 deleteFromPath ()
 {
-    eval ${2}="\${${2}//'${1}'/}"  # Sub it out
+    [[ $# -lt 2 ]]   && return 2 # return error, missing args
+    [[ ${#1} == 0 ]] && return 2 # return error, empty 1st arg
+    [[ ${#2} == 0 ]] && return 2 # return error, empty 2nd arg
+    local -n v=$2
+    v="${v//${1}/}"  # Sub it out
     colonTrimPath ${2}
 }
 
@@ -85,10 +100,10 @@ deleteFromPath ()
 
 colonTrimPath ()
 {
-    local d="${1}"
-    eval ${d}=\${${d}//::/:}  # Clean up double colons
-    eval ${d}=\${${d}#:}      # Clean up first colon
-    eval ${d}=\${${d}%:}      # Clean up trailing colon
+    local -n d=${1}
+    d=${d//::/:}  # Clean up double colons
+    d=${d#:}      # Clean up first colon
+    d=${d%:}      # Clean up trailing colon
 }
 
 # -----------------------------------------------------------

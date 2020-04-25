@@ -29,13 +29,33 @@ libStringImported=1
 # -----------------------------------------------------------
 #
 # Returns the number of characters in string.
+# Pass string by value.
 # Example:
-#     x=$(strlen dinosaur)
+#     x=$(strlen "dinosaur")
 #
 strlen ()
 {
-    local d="${1}"
-    echo "${#d}"
+    echo ${#1}
+}
+
+# -----------------------------------------------------------
+#
+# Returns the number of characters in the named string.
+# Pass by reference.
+# Example:
+#     ANIMAL=dinosaur
+#     x=$(strlenR ANIMAL)
+#     results in x = 8
+#
+strlenR ()
+{
+    [[ $# -eq 0 ]] && return 2  # return error, missing arg
+    if [ ${#1} = "0" ]; then
+        echo "0"   # empty string, len is zero
+        return     # return success
+    fi
+    local -nr s=$1
+    echo ${#s}
 }
 
 # -----------------------------------------------------------

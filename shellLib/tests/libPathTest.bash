@@ -69,6 +69,14 @@ test_isInPath()
     # test content - matching content at end
     PATH_VAR="/front_schmutz:/end_schmutz/:/usr/bird"
     assert "isInPath '/usr/bird' 'PATH_VAR'"
+
+    # test content - spaces in content
+    PATH_VAR="/front schmutz:/end schmutz/:/usr/bird"
+    assert "isInPath '/end schmutz/' 'PATH_VAR'"
+
+    # test content - spaces in content
+    PATH_VAR="/front schmutz:/end schmutz/:/usr/bird"
+    assert_fail "isInPath 'schmutz' 'PATH_VAR'"
 }
 
 # -----------------------------------------------------------

@@ -231,9 +231,18 @@ test_isXdigit()
 
 test_strlen()
 {
-    assert_equals $(strlen dinosaur) "8"     # normal string
-    assert_equals $(strlen ) "0"             # test no args
-    assert_equals $(strlen "") "0"           # test zero length string
+    assert_equals $(strlen dinosaur)    "8"     # normal string
+    assert_equals $(strlen "dino saur") "9"     # normal string
+    assert_equals $(strlen )            "0"     # test no args
+    assert_equals $(strlen "")          "0"     # test zero length string
+
+    local DINO="dinosaur"
+    assert_equals $(strlenR DINO)       "8"     # normal string
+    DINO="dino saur"
+    assert_equals $(strlenR DINO)       "9"     # normal string
+    assert_fail $(strlenR )             "0"     # test no args
+    assert_equals $(strlenR EMPTY)      "0"     # test empty named string
+    assert_equals $(strlenR "")         "0"     # test zero length string
 }
 
 # -----------------------------------------------------------
