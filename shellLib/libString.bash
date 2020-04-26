@@ -6,6 +6,9 @@
 #
 # List of functions
 #     strlen()
+#     strlenR()
+#     isEmpty()
+#     isEmptyR()
 #     isAlphNum()
 #     isAlpha()
 #     # isAscii()
@@ -30,6 +33,7 @@ libStringImported=1
 #
 # Returns the number of characters in string.
 # Pass string by value.
+#
 # Example:
 #     x=$(strlen "dinosaur")
 #
@@ -42,6 +46,7 @@ strlen ()
 #
 # Returns the number of characters in the named string.
 # Pass by reference.
+#
 # Example:
 #     ANIMAL=dinosaur
 #     x=$(strlenR ANIMAL)
@@ -56,6 +61,46 @@ strlenR ()
     fi
     local -nr s=$1
     echo ${#s}
+}
+
+# -----------------------------------------------------------
+#
+# Returns true if string is empty, otherwise false
+# Pass stirng by value string
+#
+# Example:
+#     if isEmpty s1; then
+#
+isEmpty ()
+{
+    if [ $# -gt 0 ] ; then
+        [[ ${#1} == 0 ]]
+        return
+    fi
+    
+    echo "isEmpty() Error: missing arg \$1"
+    return 2  # return error, missing arg
+}
+
+# -----------------------------------------------------------
+#
+# Returns true if string is empty, otherwise false
+# Pass string by reference
+#
+# Example:
+#     if isEmpty HOME; then
+#
+
+isEmptyR ()
+{
+    if [ $# -gt 0 ]; then
+        local -nr s=$1
+        [[ ${#s} == 0 ]]
+        return        # result of last command
+    fi
+
+    echo "isEmpty() Error: missing arg \$1"
+    return 2  # return error, missing arg
 }
 
 # -----------------------------------------------------------

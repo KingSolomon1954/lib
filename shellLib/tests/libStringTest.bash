@@ -6,6 +6,38 @@ import libString.bash
 
 # -----------------------------------------------------------
 
+test_strlen()
+{
+    assert_equals $(strlen dinosaur)    "8"     # normal string
+    assert_equals $(strlen "dino saur") "9"     # normal string
+    assert_equals $(strlen )            "0"     # test no args
+    assert_equals $(strlen "")          "0"     # test zero length string
+
+    local DINO="dinosaur"
+    assert_equals $(strlenR DINO)       "8"     # normal string
+    DINO="dino saur"
+    assert_equals $(strlenR DINO)       "9"     # normal string
+    assert_fail $(strlenR )             "0"     # test no args
+    assert_equals $(strlenR EMPTY)      "0"     # test empty named string
+    assert_equals $(strlenR "")         "0"     # test zero length string
+}
+
+test_isEmpty()
+{
+    assert "isEmpty '' "
+    assert_fail "isEmpty 'dinosaur' "
+    assert_fail "isEmpty "
+
+    local DINO="dinosaur"
+    assert "isEmptyR '' "
+    assert_fail "isEmptyR 'DINO' "
+    assert_fail "isEmptyR "
+    DINO=""
+    assert "isEmptyR 'DINO' "
+    DINO=
+    assert "isEmptyR 'DINO' "
+}
+
 test_isAlphNum()
 {
     assert "isAlphNum '12345' "
@@ -227,22 +259,6 @@ test_isXdigit()
     assert_fail "isXdigit 'I am Spartacus' "
     assert_fail "isXdigit '#%@' "
     assert_fail "isXdigit "
-}
-
-test_strlen()
-{
-    assert_equals $(strlen dinosaur)    "8"     # normal string
-    assert_equals $(strlen "dino saur") "9"     # normal string
-    assert_equals $(strlen )            "0"     # test no args
-    assert_equals $(strlen "")          "0"     # test zero length string
-
-    local DINO="dinosaur"
-    assert_equals $(strlenR DINO)       "8"     # normal string
-    DINO="dino saur"
-    assert_equals $(strlenR DINO)       "9"     # normal string
-    assert_fail $(strlenR )             "0"     # test no args
-    assert_equals $(strlenR EMPTY)      "0"     # test empty named string
-    assert_equals $(strlenR "")         "0"     # test zero length string
 }
 
 # -----------------------------------------------------------

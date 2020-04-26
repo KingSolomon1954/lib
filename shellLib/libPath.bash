@@ -97,6 +97,31 @@ deleteFromPath ()
 }
 
 # -----------------------------------------------------------
+#
+# Remove 1st element from $1. $1 is the name of a path style 
+# variable with ":" separating individual elements.
+# If $1 is empty, an empty string is returned along with a 
+# an error status, othwerwise the first element of $1 up to
+# the first ":" is removed from $1 and returned along with
+# a status of success.
+#
+# Example:
+#     removeFirstFromPath $HOME/man MANPATH
+#
+removeFirstFromPath ()
+{
+    [[ $# -lt 1 ]]   && return 2 # return error, missing args
+    [[ ${#1} == 0 ]] && return 2 # return error, empty 1st arg
+    local -n v=$1
+    local result
+    if isEmptyR $1; then
+        echo ""
+        return 1
+    fi
+    colonTrimPath ${2}
+}
+
+# -----------------------------------------------------------
 
 colonTrimPath ()
 {
