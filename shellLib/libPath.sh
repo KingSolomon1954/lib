@@ -22,9 +22,20 @@ libPathImported=1
 #         echo "Not in PATH"
 #     fi
 #
-isInPath()
+isInPathOld()
 {
     local v=$(eval echo \$${2})
+    case ":${v}:" in
+        *":$1:"*) return 0;;  # Found
+        *)        return 1;;  # Not found
+    esac
+}
+
+isInPath()
+{
+#    local v=$(eval echo \$${2})
+    eval local v=\$${2}
+   
     case ":${v}:" in
         *":$1:"*) return 0;;  # Found
         *)        return 1;;  # Not found
