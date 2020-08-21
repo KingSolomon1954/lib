@@ -2,8 +2,6 @@
 #
 # Functions to manipulate shell strings.
 #
-# Source this file to bring functions into environment
-#
 # List of functions
 #     strlen()
 #     strlenR()
@@ -24,6 +22,8 @@
 #     isUpper()
 #     # isWord()
 #     isXdigit()
+#
+# Source this file to bring functions into environment
 #
 # Avoid double inclusion
 [[ -v libStringImported ]] && return 0
@@ -66,7 +66,7 @@ strlenR ()
 # -----------------------------------------------------------
 #
 # Returns true if string is empty, otherwise false
-# Pass stirng by value string
+# Pass string by value. See also isEmptyR() below.
 #
 # Example:
 #     if isEmpty s1; then
@@ -85,12 +85,12 @@ isEmpty ()
 # -----------------------------------------------------------
 #
 # Returns true if string is empty, otherwise false
-# Pass string by reference
+# Pass string by reference. See also isEmpty() above.
 #
 # Example:
 #     if isEmpty HOME; then
 #
-
+#
 isEmptyR ()
 {
     if [ $# -gt 0 ]; then
@@ -115,7 +115,7 @@ isAlphNum()
 }
 
 # -----------------------------------------------------------
-#
+    #
 # Return true if all characters in the string are alpha as defined by
 # POSIX standard.
 #

@@ -1,8 +1,8 @@
-# Source this file to bring function into environment
+# Functions to manipulate shell PATH like variables
+# with entries separated by ":" such as MANPATH and
+# PATH itself.
 #
-# Functions to manipulate shell PATH like variables.
-# You know the variables with entries separated by ":" such
-# as #$PATH itself.
+# Source this file to bring functions into environment.
 #
 # Avoid double inclusion
 [[ -v libPathImported ]] && return 0
