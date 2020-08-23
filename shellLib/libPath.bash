@@ -1,20 +1,18 @@
 # Functions to manipulate shell environment PATH like
-# variables with entries separated by ":" such as 
-# MANPATH and PATH itself.
+# variables with entries separated by ":" such as MANPATH and
+# PATH itself.
 #
-# Normally these variables contain directory paths
-# but they don't have to. Between each path element
-# is a separator character, normally a colon ":"
-# but this can be changed by setting evpSep.
+# Normally these variables contain directory paths but they
+# don't have to. Between each path element is a separator
+# character, normally a colon ":" but this can be changed by
+# setting evpSep.
 #
-# At the time a directory is added to a PATH variable,
-# the existence of the directory can be tested for
-# and skipped if not found. See envp.setDirMustExist().
-# 
-# envp.contains(PATH, dir)
-# envp.append  (PATH, dir)
-# envp.prepend (PATH, dir)
-# envp.delete  (PATH, dir)
+# At the time a directory is added to a PATH variable, the
+# existence of the directory can be tested for and skipped if
+# not found. See envp.setDirMustExist().
+#
+# envp.contains(PATH, dir) envp.append  (PATH, dir)
+# envp.prepend (PATH, dir) envp.delete  (PATH, dir)
 # envp.setSeparator(char)
 # envp.setDirMustExist("true"/"false")
 #
@@ -53,15 +51,12 @@ envp.contains()
 
 # -----------------------------------------------------------
 #
-# Append $2 to $1 provided $2 is not already in the
-# given path variable. $1 is the variable name of a path 
-# style variable with ":" separating individual elements.
-# Optionally skips adding the fragment to the path if
-# it doesn't exist on the file space - see 
-# envp.setDirMustExist()
+# Append $2 to $1 provided $2 is not already in the given path variable.
+# $1 is the variable name of a path style variable with ":" separating
+# individual elements. Optionally skips adding the fragment to the path
+# if it doesn't exist on the file space - see envp.setDirMustExist()
 #
-# Example:
-#     envp.append MANPATH $HOME/man
+# Example: envp.append MANPATH $HOME/man
 #
 envp.append()
 {
@@ -75,15 +70,13 @@ envp.append()
 
 # -----------------------------------------------------------
 #
-# Prepend $2 to $1 provided # $1 is not already in the
-# given path variable. $1 is a path style variable 
-# with ":" separating individual elements.
-# Optionally skips adding the fragment to the path if
-# it doesn't exist on the file space - see 
-# envp.setDirMustExist()
+# Prepend $2 to $1 provided # $1 is not already in the given
+# path variable. $1 is a path style variable with ":"
+# separating individual elements. Optionally skips adding the
+# fragment to the path if it doesn't exist on the file space
+# - see envp.setDirMustExist()
 #
-# Example:
-#     envp.prepend MANPATH $HOME/man
+# Example: envp.prepend MANPATH $HOME/man
 #
 envp.prepend()
 {
@@ -113,13 +106,12 @@ envp.delete()
 
 # -----------------------------------------------------------
 #
-# Delete 1st element from $1 where $1 is the name of a
-# path style variable with ":" separating individual 
-# elements. Returns 0 (true) if something was deleted,
-# 1 (false) if nothing was deleted, 2 if an error.
+# Delete 1st element from $1 where $1 is the name of a path
+# style variable with ":" separating individual elements.
+# Returns 0 (true) if something was deleted, 1 (false) if
+# nothing was deleted, 2 if an error.
 #
-# Example:
-#     envp.deleteFirst MANPATH
+# Example: envp.deleteFirst MANPATH
 #
 envp.deleteFirst()
 {
@@ -136,13 +128,12 @@ envp.deleteFirst()
 
 # -----------------------------------------------------------
 #
-# Delete last element from $1 where $1 is the name of a
-# path style variable with ":" separating individual 
-# elements. Returns 0 (true) if something was deleted,
-# 1 (false) if nothing was deleted, 2 if an error.
+# Delete last element from $1 where $1 is the name of a path
+# style variable with ":" separating individual elements.
+# Returns 0 (true) if something was deleted, 1 (false) if
+# nothing was deleted, 2 if an error.
 #
-# Example:
-#     envp.deleteLast MANPATH
+# Example: envp.deleteLast MANPATH
 #
 envp.deleteLast()
 {
@@ -161,11 +152,11 @@ envp.deleteLast()
 #
 # Supply $1 = "true" or "false"
 #
-# When appending or prepending a directory fragment,
-# skip adding it if it doesn't exist on the file space.
-# If you are working with PATH style environment variables 
-# that are not directory fragments, (e.g. FIGNORE), then
-# you should set this to false for the scope of that call.
+# When appending or prepending a directory fragment, skip
+# adding it if it doesn't exist on the file space. If you are
+# working with PATH style environment variables that are not
+# directory fragments, (e.g. FIGNORE), then you should set
+# this to false for the scope of that call.
 
 envp.setDirMustExist()
 {
