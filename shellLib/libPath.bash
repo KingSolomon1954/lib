@@ -17,10 +17,6 @@
 # envp.setDirMustExist("true"/"false")
 #
 # Source this file to bring functions into environment.
-#
-# Avoid double inclusion
-[[ -v libEnvpImported ]] && return 0
-libEnvpImported=1
 
 envpSep=":"
 _envpDirMustExist=true
@@ -30,8 +26,8 @@ _envpDirMustExist=true
 # True if string $1 is contained in path style variable $2.
 # 
 # Returns 0 (success) if found otherwise 1 (fail).
-# $1 is passed by value.
-# $2 is the variable name of a path style variable
+# $1 is the name of a path style variable
+# $2 is passed by value.
 # expecting ":" separating individual elements.
 #
 # Example:
