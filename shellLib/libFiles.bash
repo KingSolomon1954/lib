@@ -48,6 +48,34 @@ ksl::dirName ()
 }
 
 # -----------------------------------------------------------
+#
+#  Returns the absolute path to the script itself
+#
+#  $1 = supply $0 from outermost script context
+#  caller: echo $(scriptDir $0)
+#
+ksl::scriptDir()
+{
+    # Note that there is no promise that $0 will work in all cases.
+    # Refer to web discussions regarding finding script location.
+    
+    echo $(cd "$(ksl::dirName $1)" && pwd)    # absolute path to the script
+}
+
+# -----------------------------------------------------------
+#
+#  Returns the name of the script with suffix, if any.
+#
+#  $1 = supply $0 from outermost script context
+#  caller: echo $(scriptFile $0)
+#
+ksl::scriptName()
+{
+    echo $(ksl::baseName "$0")
+}
+
+# -----------------------------------------------------------
+
 
 # fileTrimLeft 1 
 # parent, ancestor, root, stem, name
