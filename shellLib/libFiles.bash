@@ -8,7 +8,7 @@
 # dirName()
 #
 # Avoid double inclusion
-[[ -v libFilesImported ]] && return 0
+[[ -v libFilesImported ]] && [[ ! -v importForce ]] && return 0
 libFilesImported=1
 
 # -----------------------------------------------------------
