@@ -1,7 +1,14 @@
 # Source this file to bring functions into environment
-
+#
+# stdOut()
+# stdErr()
+# stdInfo()
+# stdWarn()
+# stdError()
+# stdFatal()
+#
 # Avoid double inclusion
-[[ -v libStdOutImported ]] && return 0
+[[ -v libStdOutImported ]] && [[ ! -v importForce ]] && return 0
 libStdOutImported=1
 
 # -------------------------------------------------------
@@ -47,6 +54,15 @@ stdWarn()
 stdError()
 {
     echo "[ERROR] $*" 1>&2
+}
+
+# -------------------------------------------------------
+#
+# Output message to standard error prefaced by ERROR
+#
+stdFatal()
+{
+    echo "[FATAL] $*" 1>&2
 }
 
 # -------------------------------------------------------

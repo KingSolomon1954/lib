@@ -18,6 +18,10 @@
 #
 # Source this file to bring functions into environment.
 
+# Avoid double inclusion
+[[ -v libEnvImported ]] && [[ ! -v importForce ]] && return 0
+libFilesImported=1
+
 envpSep=":"
 _envpDirMustExist=true
 

@@ -2,7 +2,7 @@
 
 # set -o xtrace   # for debugging
 
-ksl::import libPath.bash
+ksl::import libEnv.bash
 
 # -----------------------------------------------------------
 

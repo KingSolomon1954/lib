@@ -13,14 +13,16 @@ libFilesImported=1
 
 # -----------------------------------------------------------
 
-baseName ()
+ksl::baseName ()
 {
-    echo ${1##*/}
+    local s="${1:-}"
+    s="${s%/}"
+    echo ${s##*/}
 }
 
 # -----------------------------------------------------------
 
-dirName ()
+ksl::dirName ()
 {
     # Remove any trailing '/' that doesn't have anything following it (to
     # parallel the behavior of "dirname").

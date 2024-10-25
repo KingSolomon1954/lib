@@ -1,7 +1,8 @@
 
 UNIT_TESTS := \
-	tests/libPathTest.bash \
-	tests/libStringTest.bash
+	tests/libEnvTest.bash \
+	tests/libStringTest.bash \
+	tests/libFilesTest.bash
 
-runtests:
+unit-tests:
 	bash_unit $(UNIT_TESTS)
