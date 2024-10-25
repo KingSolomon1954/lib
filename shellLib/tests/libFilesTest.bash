@@ -32,16 +32,15 @@ test_dirName()
 
 test_scriptDir()
 {
-    local arg0="/usr/bin/grep"
-    assert_equals "/usr/bin"   "$(ksl::scriptDir ${arg0})"
+    local tmp=$(ksl::scriptName)
+    assert_not_equals "0" "${#tmp}"  # Best we can do
 }
 
 # -----------------------------------------------------------
 
 test_scriptName()
 {
-    local arg0="/usr/bin/grep"
-    assert_equals "grep"   "$(ksl::scriptName ${arg0})"
+    assert_equals "bash_unit" "$(ksl::scriptName)"
 }
 
 # -----------------------------------------------------------

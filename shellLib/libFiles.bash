@@ -1,12 +1,16 @@
-# Source this file to bring function into environment
+# -------------------------------------------------------
 #
-# Functions to manipulate files names.
+# Functions to manipulate directory and file names.
 #
-# Source this file to bring these functions into environment
+# Contains the following:
 #
 # baseName()
 # dirName()
+# scriptName()
+# scriptDir()
 #
+# -----------------------------------------------------------
+
 # Avoid double inclusion
 [[ -v libFilesImported ]] && [[ ! -v importForce ]] && return 0
 libFilesImported=1
@@ -49,25 +53,30 @@ ksl::dirName ()
 
 # -----------------------------------------------------------
 #
-#  Returns the absolute path to the script itself
+# Returns the absolute path to the script itself
 #
-#  $1 = supply $0 from outermost script context
-#  caller: echo $(scriptDir $0)
+# Usage for this is primarily at script startup, for those
+# occasions when a script needs to know the location
+# of the script itself.
+#
+# Takes no args. Uses $0 from env
 #
 ksl::scriptDir()
 {
     # Note that there is no promise that $0 will work in all cases.
     # Refer to web discussions regarding finding script location.
-    
-    echo $(cd "$(ksl::dirName $1)" && pwd)    # absolute path to the script
+    echo $(cd "$(ksl::dirName $0)" && pwd)
 }
 
 # -----------------------------------------------------------
 #
-#  Returns the name of the script with suffix, if any.
+# Returns the name of the script with suffix, if any.
 #
-#  $1 = supply $0 from outermost script context
-#  caller: echo $(scriptFile $0)
+# Usage for this is primarily at script startup, so that
+# a script doesn't need to hard code in its name.
+#
+# $1 = supply $0 from outermost script context
+# caller: echo $(scriptFile $0)
 #
 ksl::scriptName()
 {

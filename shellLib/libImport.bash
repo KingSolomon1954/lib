@@ -1,15 +1,28 @@
 # -----------------------------------------------------------
 #
-# Env var tells where the KSL shell library is installed
+# Function to import (source) KSL library functions.
 #
+# Contains the following:
+#
+# import()
+#
+# -----------------------------------------------------------
+
+# Env var tells where the KSL shell library is installed
 export KSL_BASH_LIB=$HOME/lib/shellLib
 
 # -----------------------------------------------------------
 #
-# Function to source library functions
-#
 # $1 the file to import
 # #2 use "force" to force another import
+#
+# If a ksl::libxxx file has already been imported then importing it
+# again is ordinarily ignored. Use the force option if you
+# want to import it again anyway.
+# 
+# example:
+#     ksl::import libFiles.bash
+#     ksl::import libFiles.bash force
 #
 ksl::import ()
 {
@@ -24,10 +37,7 @@ ksl::import ()
     unset importForce
 }
 
-success=0
-fail=1
-
-# Place import() function in env which allows interactive use of libs
+# Place import() in env which allows interactive use of libs
 export -f ksl::import
 
 # -----------------------------------------------------------

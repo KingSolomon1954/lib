@@ -2,7 +2,8 @@
 #
 # Functions to manipulate shell strings.
 #
-# List of functions
+# Contains the following:
+#
 #     strlen()
 #     strlenR()
 #     isEmpty()
@@ -31,8 +32,8 @@
 #     trimLeft()
 #     trimWhitespace()
 #
-# Source this file to bring functions into environment
-#
+# -----------------------------------------------------------
+
 # Avoid double inclusion
 [[ -v libStringImported ]] && [[ ! -v importForce ]] && return 0
 libStringImported=1

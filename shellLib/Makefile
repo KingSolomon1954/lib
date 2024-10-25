@@ -1,8 +1,9 @@
 
 UNIT_TESTS := \
+	tests/libColorTest.bash \
 	tests/libEnvTest.bash \
-	tests/libStringTest.bash \
-	tests/libFilesTest.bash
+	tests/libFilesTest.bash \
+	tests/libStringTest.bash
 
 unit-tests:
 	bash_unit $(UNIT_TESTS)
