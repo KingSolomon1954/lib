@@ -43,16 +43,16 @@ ksl::import libFiles.bash
 ksl::import libStrings.bash
 ksl::import libStdOut.bash
 
-# Global variables. Actually, in a shell script, all variables in all
-# functions are global, so be careful. The variables set here are those
-# variables which are intended to be accessed globally.
+# Global variables. Actually, in a shell script, all variables in
+# all functions are global, so be careful. The variables set here
+# are those variables which are intended to be accessed globally.
 #
 declare -r scriptVersion="1.0.0"
 declare -r scriptName=$(ksl::trimRight "$(ksl::scriptName)" ".bash")
 
 tmpFile="/tmp/${scriptName}.$$"
 resourceReserved="no"
-verbosityLevel=0
+declare -i verbosityLevel=0
 prettyPrint="no"
 filesToProcess=
 
@@ -88,31 +88,52 @@ commandLine()
         -p|--pretty-print)
             # Example of handling an option which doesn't require an argument
             prettyPrint="yes";;
-        -verbose|--verbose)
+        -V|--verbose)
             # Example of handling an option which requires an argument
             if [ $# -lt 2 ]; then
                 usage No argument specified along with \"$1\" option.
+                echo
+                usageAlt No argument specified along with \"$1\" option.
+                exitClean 1
+            fi
+            if ! ksl::isInteger $2; then
+                usage Bad argument \"$2\" specified along with \"$1\" option.
+                echo
+                usageAlt Bad argument \"$2\" specified along with \"$1\" option.
+                exitClean 1
+            fi
+            if [[ $2 -gt 3 ]]; then
+                usage Bad verbosity level: $2, valid values [0..3]
+                echo
+                usageAlt Bad verbosity level: $2, valid values [0..3]
                 exitClean 1
             fi
             verbosityLevel=$2
             shift;;
         -*)
             usage Invalid option \"$1\".
+            echo
+            usageAlt Invalid option \"$1\".
             exitClean 1;;
         *)
-            # Example of handling non-flag arguments which may be repeated
-            filesToProcess="${filesToProcess} $1";;
+            # Example of handling non-flag arguments which may be
+            # repeated. In this case gather files into a colon ":"
+            # separated list which simplifies handling file names
+            # with spaces.
+            if [ -n "${filesToProcess}" ]; then
+                filesToProcess="${filesToProcess}:$1"
+            else
+                filesToProcess="$1"
+            fi
+            ;;
         esac
         shift
     done
 
     if [ -z "${filesToProcess}" ]; then
         usage Must specify at least one file to process.
-        exitClean 1
-    fi
-
-    if [[ "${verbosityLevel}" -gt 3 ]]; then
-        usage Bad verbosity level: ${verbosityLevel}, valid values [0..3]
+        echo
+        usageAlt Must specify at least one file to process.
         exitClean 1
     fi
 }
@@ -130,7 +151,7 @@ showConfig()
 {
     ksl::stdDebug "prettyPrint: ${prettyPrint}"
     ksl::stdDebug "verbosityLevel: ${verbosityLevel}"
-    ksl::stdDebug "fileToProcess: ${filesToProcess}"
+    ksl::stdDebug "filesToProcess: ${filesToProcess}"
 }
 
 # -----------------------------------------------------------
@@ -162,7 +183,7 @@ exitClean()
 usage()
 {
     # First output any passed message
-    if [ $# -ne 0 ]; then ksl::stdErr "$*"; fi
+    if [ $# -ne 0 ]; then ksl::stdError "$*"; fi
 
     # Extract usage from prologue at top of script and output it. The first
     # "sed" outputs from the first line up to the "# DESCRIPTION" line (to
@@ -180,15 +201,51 @@ usage()
 }
 
 # -----------------------------------------------------------
+#
+# Alternate version of usage() supporting color. Let's
+# you hand craft the output formatted and highlighted 
+# exactly as you want. In this example it's formatted
+# similar to the prolog.
+#
+usageAlt()
+{
+    # First output any passed message
+    if [ $# -ne 0 ]; then ksl::stdError "$*"; fi
+
+    displayWithColor <<EOF
+${BOLD}${FG_YELLOW}Usage:${CLEAR}
+     ${scriptName} [options...] <file> ...
+     ${BOLD}-h${CLEAR}, --help            ${FG_MAGENTA}show this help${CLEAR}
+     ${BOLD}-v${CLEAR}, --version         ${FG_MAGENTA}display version and exit${CLEAR}
+     ${BOLD}-p${CLEAR}, --pretty-print    ${FG_MAGENTA}set pretty printing${CLEAR}
+     ${BOLD}-V${CLEAR}, --verbose <level> ${FG_MAGENTA}set verbosity to <level>${CLEAR}
+EOF
+}
+
+# -----------------------------------------------------------
+#
+# Helper function for usageAlt()
+#
+displayWithColor()
+{
+    while IFS= read -r line; do
+        echo -e "${line}"
+    done
+}
+
+# -----------------------------------------------------------
 
 processFiles()
 {
+    SAVE_IFS="${IFS}"
+    IFS=":"
     for f in ${filesToProcess}; do
-        ksl::stdInfo "Processing file: ${f}"
+        ksl::stdInfo "Processing file: \"${f}\""
         if [ "${prettyPrint}" == "yes" ]; then
             ksl::stdDebug "Pretty formatting file: ${f}"
         fi
     done
+    IFS="${SAVE_IFS}"
 }
 
 # -----------------------------------------------------------
