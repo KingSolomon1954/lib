@@ -1,9 +1,9 @@
 
 UNIT_TESTS := \
-	tests/libColorTest.bash \
+	tests/libColorsTest.bash \
 	tests/libEnvTest.bash \
 	tests/libFilesTest.bash \
-	tests/libStringTest.bash
+	tests/libStringsTest.bash
 
-unit-tests:
-	bash_unit $(UNIT_TESTS)
+unit-tests unit-test::
+	KSL_BASH_LIB=$(PWD) bash_unit $(UNIT_TESTS)

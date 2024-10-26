@@ -9,7 +9,10 @@
 # -----------------------------------------------------------
 
 # Env var tells where the KSL shell library is installed
-export KSL_BASH_LIB=$HOME/lib/shellLib
+# TODO: This needs to move out of here. User must
+# define it external to this script.
+#
+# export KSL_BASH_LIB=$HOME/lib/shellLib
 
 # -----------------------------------------------------------
 #
@@ -26,13 +29,22 @@ export KSL_BASH_LIB=$HOME/lib/shellLib
 #
 ksl::import ()
 {
-    [[ -n $2 ]] && importForce=1
+    # No need to check for ${KSL_BASH_LIB}
+    # This function could not be running unless
+    # it was already available.
+    # if [ -z ${KSL_BASH_LIB} ]; then
+    #    echo "[ERROR] Unable to import file: \"$1\" \"KSL_BASH_LIB\" env var must be defined"
+    #    exit 1
+    # fi
+    if [ ! -f "${KSL_BASH_LIB}/$1" ]; then
+        echo "[ERROR] Unable to import file: \"${KSL_BASH_LIB}/$1\" no such file" >&2
+        exit 2
+    fi
+    [ $# -ge 2 ] && importForce=1
     if ! source "${KSL_BASH_LIB}/$1"; then
-        if [ ! -d "${KSL_BASH_LIB}" ]; then
-            echo "[ERROR] KSL_BASH_LIB ${KSL_BASH_LIB} does not exist"
-            unset importForce
-            exit 1
-        fi
+        echo "[ERROR] error importing: \"${KSL_BASH_LIB}/$1\"" >&2
+        unset importForce
+        exit 2
     fi
     unset importForce
 }

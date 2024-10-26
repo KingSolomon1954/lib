@@ -2,7 +2,9 @@
 #
 # Functions to help with color.
 #
-# ksl::colorCapable
+# Contains the following:
+#
+# ksl::colorCapable()
 #
 # -----------------------------------------------------------
 

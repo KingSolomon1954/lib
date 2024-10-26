@@ -2,8 +2,8 @@
 
 source ${KSL_BASH_LIB}/libImport.bash
 
-import libFiles.bash
-import libStdOut.bash
+ksl::import libFiles.bash
+ksl::import libStdOut.bash
 
 ksl::stdTrace "Trying out color messages"
 ksl::stdDebug "Trying out color messages"

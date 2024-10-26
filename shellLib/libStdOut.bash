@@ -17,7 +17,7 @@
 [[ -v libStdOutImported ]] && [[ ! -v importForce ]] && return 0
 libStdOutImported=1
 
-import libColor.bash
+ksl::import libColors.bash
 
 # -------------------------------------------------------
 #

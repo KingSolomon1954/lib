@@ -2,7 +2,8 @@
 
 # set -o xtrace   # for debugging
 
-ksl::import libColor.bash
+source ../libImport.bash
+ksl::import libColors.bash
 
 # -----------------------------------------------------------
 

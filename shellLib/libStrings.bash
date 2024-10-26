@@ -46,7 +46,7 @@ libStringImported=1
 # Example:
 #     x=$(strlen "dinosaur")
 #
-strlen ()
+ksl::strlen ()
 {
     echo ${#1}
 }
@@ -61,7 +61,7 @@ strlen ()
 #     x=$(strlenR ANIMAL)
 #     results in x = 8
 #
-strlenR ()
+ksl::strlenR ()
 {
     [ -z ${1:-} ] && echo 0 && return
     local -nr s=$1
@@ -76,7 +76,7 @@ strlenR ()
 # Example:
 #     if isEmpty s1; then
 #
-isEmpty ()
+ksl::isEmpty ()
 {
     [ -z ${1:-} ]
 }
@@ -90,7 +90,7 @@ isEmpty ()
 #     if isEmpty HOME; then
 #
 #
-isEmptyR ()
+ksl::isEmptyR ()
 {
     [ -z ${1:-} ] && return     # empty or no arg
     local -nr s=$1
@@ -102,7 +102,7 @@ isEmptyR ()
 # Return true if all characters in the string are alphanumeric as
 # defined by POSIX standard.
 #
-isAlphNum()
+ksl::isAlphNum()
 {
     local pat='^[[:alnum:]]+$'
     [[ ${1} =~ ${pat} ]]
@@ -113,7 +113,7 @@ isAlphNum()
 # Return true if all characters in the string are alpha as defined by
 # POSIX standard.
 #
-isAlpha()
+ksl::isAlpha()
 {
     local pat='^[[:alpha:]]+$'
     [[ ${1} =~ ${pat} ]]
@@ -126,7 +126,7 @@ isAlpha()
 #
 # ASCII is not currently working. Need to investigate.
 #
-isAscii()
+ksl::isAscii()
 {
     local pat='^[[:ascii:]]+$'
     [[ ${1} =~ ${pat} ]]
@@ -137,7 +137,7 @@ isAscii()
 # Return true if all characters in the string are blank as
 # defined by POSIX standard.
 #
-isBlank()
+ksl::isBlank()
 {
     local pat='^[[:blank:]]+$'
     [[ ${1} =~ ${pat} ]]
@@ -148,7 +148,7 @@ isBlank()
 # Return true if all characters in the string are control characters as
 # defined by POSIX standard.
 #
-isCntrl()
+ksl::isCntrl()
 {
     local pat='^[[:cntrl:]]+$'
     [[ ${1} =~ ${pat} ]]
@@ -159,7 +159,7 @@ isCntrl()
 # Return true if all characters in the string are digits as defined by
 # POSIX standard. Note that "+" "-" "." are not digits.
 #
-isDigit()
+ksl::isDigit()
 {
     local pat='^[[:digit:]]+$'
     [[ ${1} =~ ${pat} ]]
@@ -170,7 +170,7 @@ isDigit()
 # Return true if all characters in the string are in the graph class
 # (displayable on a screen) as defined by POSIX standard.
 #
-isGraph()
+ksl::isGraph()
 {
     local pat='^[[:graph:]]+$'
     [[ ${1} =~ ${pat} ]]
@@ -181,7 +181,7 @@ isGraph()
 # Return true if all characters in the string are lowercase as
 # defined by POSIX standard.
 #
-isLower()
+ksl::isLower()
 {
     local pat='^[[:lower:]]+$'
     [[ ${1} =~ ${pat} ]]
@@ -192,7 +192,7 @@ isLower()
 # Return true if the string forms a valid integer meaning all digits
 # with an optional preceding +/-. Does not check for length.
 #
-isInteger()
+ksl::isInteger()
 {
     local pat='^[+-]?[[:digit:]]+$'
     [[ ${1} =~ ${pat} ]]
@@ -202,16 +202,16 @@ isInteger()
 #
 # Return true if the string forms a valid number
 #
-isNumber()
+ksl::isNumber()
 {
-    isInteger $1 || isFloat $1
+    ksl::isInteger $1 || ksl::isFloat $1
 }
 
 # -----------------------------------------------------------
 #
 # Return true if the string forms a valid number
 #
-isFloat()
+ksl::isFloat()
 {
     [[ ${1:-} =~ ^[+-]?[0-9]*\.?[0-9]+$ ]]
 }
@@ -221,7 +221,7 @@ isFloat()
 # Return true if all characters in the string are printable as
 # defined by POSIX standard.
 #
-isPrint()
+ksl::isPrint()
 {
     local pat='^[[:print:]]+$'
     [[ ${1} =~ ${pat} ]]
@@ -232,7 +232,7 @@ isPrint()
 # Return true if all characters in the string are punctuations as
 # defined by POSIX standard.
 #
-isPunct()
+ksl::isPunct()
 {
     local pat='^[[:punct:]]+$'
     [[ ${1} =~ ${pat} ]]
@@ -243,7 +243,7 @@ isPunct()
 # Return true if all characters in the string are spaces as
 # defined by POSIX standard.
 #
-isSpace()
+ksl::isSpace()
 {
     local pat='^[[:space:]]+$'
     [[ ${1} =~ ${pat} ]]
@@ -254,7 +254,7 @@ isSpace()
 # Return true if all characters in the string are uppercase as
 # defined by POSIX standard.
 #
-isUpper()
+ksl::isUpper()
 {
     local pat='^[[:upper:]]+$'
     [[ ${1} =~ ${pat} ]]
@@ -267,7 +267,7 @@ isUpper()
 #
 # isWord is not currently working. Need to investigate.
 #
-isWord()
+ksl::isWord()
 {
     local pat='^[[:word:]]+$'
     [[ ${1} =~ ${pat} ]]
@@ -278,7 +278,7 @@ isWord()
 # Return true if all characters in the string are valid hexadecimal
 # digits.
 #
-isXdigit()
+ksl::isXdigit()
 {
     local pat='^[[:xdigit:]]+$'
     [[ ${1} =~ ${pat} ]]
@@ -289,7 +289,7 @@ isXdigit()
 # Return true if $1 string starts with $2 string
 # digits.
 #
-startsWith()
+ksl::startsWith()
 {
     [ -z ${2:-} ] && return 1
     [[ $1 =~ ^"$2" ]]
@@ -300,7 +300,7 @@ startsWith()
 # Return true if $1 string ends with $2 string
 # digits.
 #
-endsWith()
+ksl::endsWith()
 {
     [ -z ${2:-} ] && return 1
     [[ $1 =~ "$2"$ ]]
@@ -310,7 +310,7 @@ endsWith()
 #
 # Return copy of $1 string converted to lower case
 #
-toLower()
+ksl::toLower()
 {
     local s=${1:-}
     echo "${s,,}"
@@ -320,7 +320,7 @@ toLower()
 #
 # Return copy of $1 string converted to upper case
 #
-toUpper()
+ksl::toUpper()
 {
     local s=${1:-}
     echo "${s^^}"
@@ -331,7 +331,7 @@ toUpper()
 # Return copy of $1 string with first character capitalized and
 # the rest left alone.
 #
-capitalize()
+ksl::capitalize()
 {
     local s=${1:-}
     echo "${s^}"
@@ -343,7 +343,7 @@ capitalize()
 # from the front of $1. If $2 is not given then defaults to
 # removing whitespace. $2 argument is a prefix.
 #
-trimLeft()
+ksl::trimLeft()
 {
     local s=${1:-}
     if (( $# < 2 )); then
@@ -359,7 +359,7 @@ trimLeft()
 # from the end of $1. If $2 is not given then defaults to
 # removing whitespace. $2 argument is a prefix.
 #
-trimRight()
+ksl::trimRight()
 {
     local s=${1:-}
     if (( $# < 2 )); then
@@ -375,10 +375,10 @@ trimRight()
 # from the end of $1. If $2 is not given then defaults to
 # removing whitespace. $2 argument is a prefix.
 #
-trimWhitespace()
+ksl::trimWhitespace()
 {
-    local s=$(trimRight "${1:-}")
-    trimLeft "${s}"
+    local s=$(ksl::trimRight "${1:-}")
+    ksl::trimLeft "${s}"
 }
 
 # -----------------------------------------------------------
