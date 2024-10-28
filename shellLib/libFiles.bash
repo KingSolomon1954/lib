@@ -8,12 +8,15 @@
 # dirName()
 # scriptName()
 # scriptDir()
+# suffix()
 #
 # -----------------------------------------------------------
 
-# Avoid double inclusion
-[ -v libFilesImported ] && [ ! -v importForce ] && return
-libFilesImported=0
+# Avoid double inclusion, but optionally allow a forcing option
+# mainly for developers. For example: "source libStdOut -f"
+#
+[ -v libFilesImported ] && [ "$1" != "-f" ] && return
+libFilesImported=true
 
 # -----------------------------------------------------------
 

@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-# set -o xtrace   # for debugging
+source ${KSL_BASH_LIB}/libFiles.bash
 
-source ../libImport.bash
-ksl::import libFiles.bash
+# set -o xtrace   # for debugging
 
 # -----------------------------------------------------------
 

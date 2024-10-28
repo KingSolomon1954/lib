@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-# set -o xtrace   # for debugging
+source ${KSL_BASH_LIB}/libColors.bash
 
-source ../libImport.bash
-ksl::import libColors.bash
+# set -o xtrace   # for debugging
 
 # -----------------------------------------------------------
 

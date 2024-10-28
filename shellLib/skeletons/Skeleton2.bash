@@ -33,15 +33,10 @@
 #
 # -----------------------------------------------------------
 
-# Bring in KSL bash library
-if ! source ${KSL_BASH_LIB}/libImport.bash; then
-    echo "[ERROR] \"KSL_BASH_LIB\" env var is not defined"
-    exit 1
-fi
-
-ksl::import libFiles.bash
-ksl::import libStrings.bash
-ksl::import libStdOut.bash
+# Bring in parts of KSL bash library
+source ${KSL_BASH_LIB}/libFiles.bash
+source ${KSL_BASH_LIB}/libStrings.bash
+source ${KSL_BASH_LIB}/libStdOut.bash
 
 # Global variables. Actually, in a shell script, all variables in
 # all functions are global, so be careful. The variables set here
@@ -51,9 +46,10 @@ declare -r scriptVersion="1.0.0"
 declare -r scriptName=$(ksl::trimRight "$(ksl::scriptName)" ".bash")
 
 tmpFile="/tmp/${scriptName}.$$"
-resourceReserved="no"
 declare -i verbosityLevel=0
-prettyPrint="no"
+resourceReserved=false
+prettyPrint=false
+demo=true
 filesToProcess=
 
 # -----------------------------------------------------------
@@ -87,33 +83,25 @@ commandLine()
             exitClean 0;;
         -p|--pretty-print)
             # Example of handling an option which doesn't require an argument
-            prettyPrint="yes";;
+            prettyPrint=true;;
         -V|--verbose)
             # Example of handling an option which requires an argument
             if [ $# -lt 2 ]; then
                 usage No argument specified along with \"$1\" option.
-                echo
-                usageAlt No argument specified along with \"$1\" option.
                 exitClean 1
             fi
             if ! ksl::isInteger $2; then
-                usage Bad argument \"$2\" specified along with \"$1\" option.
-                echo
-                usageAlt Bad argument \"$2\" specified along with \"$1\" option.
+                usage Bad argument \"$2\", specified along with \"$1\" option.
                 exitClean 1
             fi
             if [[ $2 -gt 3 ]]; then
                 usage Bad verbosity level: $2, valid values [0..3]
-                echo
-                usageAlt Bad verbosity level: $2, valid values [0..3]
                 exitClean 1
             fi
             verbosityLevel=$2
             shift;;
         -*)
             usage Invalid option \"$1\".
-            echo
-            usageAlt Invalid option \"$1\".
             exitClean 1;;
         *)
             # Example of handling non-flag arguments which may be
@@ -132,8 +120,6 @@ commandLine()
 
     if [ -z "${filesToProcess}" ]; then
         usage Must specify at least one file to process.
-        echo
-        usageAlt Must specify at least one file to process.
         exitClean 1
     fi
 }
@@ -165,8 +151,8 @@ exitClean()
     rm -f ${tmpFile}
 
     # Example of checking if a resource was reserved, and if so, freeing it
-    if [ "${resourceReserved}" == "yes" ]; then
-        : #logic to free resource would replace this line
+    if ${resourceReserved}; then
+        : # Logic to free resource would replace this line
     fi
 
     # Exit with passed exit status (if not specified, default to 0)
@@ -182,6 +168,10 @@ exitClean()
 #
 usage()
 {
+    if $demo; then
+        usageAlt "$*"
+    fi
+    
     # First output any passed message
     if [ $# -ne 0 ]; then ksl::stdError "$*"; fi
 
@@ -240,7 +230,7 @@ processFiles()
     SAVE_IFS="${IFS}"; IFS=":"
     for f in ${filesToProcess}; do
         ksl::stdInfo "Processing file: \"${f}\""
-        if [ "${prettyPrint}" == "yes" ]; then
+        if ${prettyPrint}; then
             ksl::stdDebug "Pretty formatting file: ${f}"
         fi
     done

@@ -8,9 +8,11 @@
 #
 # -----------------------------------------------------------
 
-# Avoid double inclusion
-[ -v libColorImported ] && [ ! -v importForce ] && return
-libColorImported=0
+# Avoid double inclusion, but optionally allow a forcing option
+# mainly for developers. For example: "source libStdOut -f"
+#
+[ -v libColorImported ] && [ "$1" != "-f" ] && return
+libColorImported=true
 
 ESC="\033"
 FG="${ESC}[38;5;0;"

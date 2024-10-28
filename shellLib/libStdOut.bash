@@ -13,11 +13,13 @@
 #
 # -----------------------------------------------------------
 
-# Avoid double inclusion
-[ -v libStdOutImported ] && [ ! -v importForce ] && return
-libStdOutImported=0
+# Avoid double inclusion, but optionally allow a forcing option
+# mainly for developers. For example: "source libStdOut -f"
+#
+[ -v libStdOutImported ] && [ "$1" != "-f" ] && return
+libStdOutImported=true
 
-ksl::import libColors.bash
+source ${KSL_BASH_LIB}/libColors.bash
 
 # -------------------------------------------------------
 #

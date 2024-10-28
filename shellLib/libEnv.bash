@@ -13,9 +13,11 @@
 #
 # Source this file to bring functions into environment.
 
-# Avoid double inclusion
-[ -v libEnvImported ] && [ ! -v importForce ] && return
-libEnvImported=0
+# Avoid double inclusion, but optionally allow a forcing option
+# mainly for developers. For example: "source libStdOut -f"
+#
+[ -v libEnvImported ] && [ "$1" != "-f" ] && return
+libEnvImported=true
 
 envpSep=":"
 
@@ -39,10 +41,10 @@ envpSep=":"
 #
 envp.contains()
 {
-    [ -z $1 ]   && return 2    # Empty arg, env vars can't have spaces
-    [ -z "$2" ] && return 3    # Empty arg, use quotes, support filename with spaces
+    [ -z $1 ]   && return 1    # Empty arg, env vars can't have spaces
+    [ -z "$2" ] && return 1    # Empty arg, use quotes, support filename with spaces
     local -rn ref=$1
-    [ -z "$ref" ] && return 4                 # Empty environment var
+    [ -z "$ref" ] && return 1                 # Empty environment var
 
     local pat="^${2}${envpSep}"               # Front
     [[ ${ref} =~ ${pat} ]] && return 0        # Found it
@@ -172,25 +174,13 @@ envp.deleteLast()
 }
 
 # -----------------------------------------------------------
-#
-# Helper function
-#
-_envp.checkArgs()
-{
-    [[ $# -ne 2 ]]   && return 2 # return error, missing args
-    [[ ${#1} == 0 ]] && return 2 # return error, empty 1st arg
-    [[ ${#2} == 0 ]] && return 2 # return error, empty 2nd arg
-    return 0  # args are good
-}
-
-# -----------------------------------------------------------
 
 _envp.colonTrimPath ()
 {
-    local -n v=${1}
-    v=${v//${envpSep}${envpSep}/${envpSep}}  # Clean up double colons
-    v=${v#${envpSep}}      # Clean up first colon
-    v=${v%${envpSep}}      # Clean up trailing colon
+    local -n ref=${1}
+    ref=${ref//${envpSep}${envpSep}/${envpSep}}  # Clean up double colons
+    ref=${ref#${envpSep}}      # Clean up first colon
+    ref=${ref%${envpSep}}      # Clean up trailing colon
 }
 
 # -----------------------------------------------------------

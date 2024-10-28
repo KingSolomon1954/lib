@@ -36,8 +36,8 @@
 # -----------------------------------------------------------
 
 # Avoid double inclusion
-[ -v libStringImported ] && [ ! -v importForce ] && return
-libStringImported=0
+[ -v libStringImported ] && [ "$1" != "-f" ] && return
+libStringImported=true
 
 # -----------------------------------------------------------
 #
