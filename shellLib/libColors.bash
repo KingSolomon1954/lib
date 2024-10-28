@@ -4,7 +4,7 @@
 #
 # Contains the following:
 #
-# ksl::colorCapable()
+#     ksl::colorCapable()
 #
 # -----------------------------------------------------------
 

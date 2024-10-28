@@ -4,11 +4,11 @@
 #
 # Contains the following:
 #
-# baseName()
-# dirName()
-# scriptName()
-# scriptDir()
-# suffix()
+#     ksl::baseName()
+#     ksl::dirName()
+#     ksl::scriptName()
+#     ksl::scriptDir()
+#     ksl::suffix()
 #
 # -----------------------------------------------------------
 

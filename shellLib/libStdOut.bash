@@ -2,14 +2,16 @@
 #
 # Functions to help print messages.
 #
-# stdOut()
-# stdErr()
-# stdTrace()
-# stdDebug()
-# stdInfo()
-# stdWarn()
-# stdError()
-# stdFatal()
+# Contains the following:
+#
+#    ksl::stdOut()
+#    ksl::stdErr()
+#    ksl::stdTrace()
+#    ksl::stdDebug()
+#    ksl::stdInfo()
+#    ksl::stdWarn()
+#    ksl::stdError()
+#    ksl::stdFatal()
 #
 # -----------------------------------------------------------
 

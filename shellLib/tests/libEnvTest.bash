@@ -6,324 +6,324 @@ source ${KSL_BASH_LIB}/libEnv.bash
 
 # -----------------------------------------------------------
 
-test_envp.contains()
+test_envContains()
 {
     # test insufficient args - no args
-    assert_fails "envp.contains"
+    assert_fails "ksl::envContains"
 
     # test insufficient args - 1 arg
-    assert_fails "envp.contains '/usr/dinosaur'"
+    assert_fails "ksl::envContains '/usr/dinosaur'"
 
     # test two empty args
-    assert_fails "envp.contains '' ''"
+    assert_fails "ksl::envContains '' ''"
 
     # test empty args
-    assert_fails "envp.contains '/usr/dinosaur' ''"
+    assert_fails "ksl::envContains '/usr/dinosaur' ''"
 
     # test empty args
-    assert_fails "envp.contains '' '/usr/dinosaur'"
+    assert_fails "ksl::envContains '' '/usr/dinosaur'"
 
     # test unset var
-    assert_fails "envp.contains 'SOME_UNSETVAR' '/usr/dinosaur'"
+    assert_fails "ksl::envContains 'SOME_UNSETVAR' '/usr/dinosaur'"
 
     # test unset var
-    assert_fails "envp.contains 'SOME_UNSETVAR' '/usr/dinosaur'"
+    assert_fails "ksl::envContains 'SOME_UNSETVAR' '/usr/dinosaur'"
 
     # test null var
     SOME_EMPTY_VAR=
-    assert_fails "envp.contains 'SOME_EMPTY_VAR' '/usr/dinosaur'"
+    assert_fails "ksl::envContains 'SOME_EMPTY_VAR' '/usr/dinosaur'"
 
     # test null var
     SOME_EMPTY_VAR=
-    assert_fails "envp.contains 'SOME_EMPTY_VAR' '/usr/dinosaur'"
+    assert_fails "ksl::envContains 'SOME_EMPTY_VAR' '/usr/dinosaur'"
 
     # test empty var
     SOME_EMPTY_VAR=""
-    assert_fails "envp.contains 'SOME_EMPTY_VAR' '/usr/dinosaur'"
+    assert_fails "ksl::envContains 'SOME_EMPTY_VAR' '/usr/dinosaur'"
 
     # test simple content - matching content
     PATH_VAR="/usr/bird"
-    assert "envp.contains 'PATH_VAR' '/usr/bird'"
+    assert "ksl::envContains 'PATH_VAR' '/usr/bird'"
 
     # test simple content trailing ":" - matching content
     PATH_VAR="/usr/bird:"
-    assert "envp.contains 'PATH_VAR' '/usr/bird'"
+    assert "ksl::envContains 'PATH_VAR' '/usr/bird'"
 
     # test simple content leading ":" - matching content
     PATH_VAR=":/usr/bird"
-    assert "envp.contains 'PATH_VAR' '/usr/bird'"
+    assert "ksl::envContains 'PATH_VAR' '/usr/bird'"
 
     # test content - matching content at front
     PATH_VAR="/usr/bird:/front_schmutz:/end_schmutz"
-    assert "envp.contains 'PATH_VAR' '/usr/bird'"
+    assert "ksl::envContains 'PATH_VAR' '/usr/bird'"
 
     # test content - matching content
     PATH_VAR="/front_schmutz:/usr/bird:/end_schmutz"
-    assert "envp.contains 'PATH_VAR' '/usr/bird'"
+    assert "ksl::envContains 'PATH_VAR' '/usr/bird'"
 
     # test content - matching content at end
     PATH_VAR="/front_schmutz:/end_schmutz/:/usr/bird"
-    assert "envp.contains 'PATH_VAR' '/usr/bird'"
+    assert "ksl::envContains 'PATH_VAR' '/usr/bird'"
 
     # test content - spaces in content
     PATH_VAR="/front schmutz:/end schmutz/:/usr/bird"
-    assert "envp.contains 'PATH_VAR' '/end schmutz/'"
+    assert "ksl::envContains 'PATH_VAR' '/end schmutz/'"
 
     # test content - spaces in content
     PATH_VAR="/front schmutz:/end schmutz/:/usr/bird"
-    assert_fails "envp.contains 'PATH_VAR' 'schmutz'"
+    assert_fails "ksl::envContains 'PATH_VAR' 'schmutz'"
 }
 
 # -----------------------------------------------------------
 
-test_envp.append()
+test_envAppend()
 {
     # test insufficient args - no args
-    assert_fails "envp.append"
+    assert_fails "ksl::envAppend"
 
     # test insufficient args - 1 arg
-    assert_fails "envp.append '/usr/dinosaur'"
+    assert_fails "ksl::envAppend '/usr/dinosaur'"
 
     # test two empty args
-    assert_fails "envp.append '' ''"
+    assert_fails "ksl::envAppend '' ''"
 
     # test empty args
-    assert_fails "envp.append '/usr/dinosaur' ''"
+    assert_fails "ksl::envAppend '/usr/dinosaur' ''"
 
     # test empty args
-    assert_fails "envp.append '' '/usr/dinosaur'"
+    assert_fails "ksl::envAppend '' '/usr/dinosaur'"
 
     # test appending to an unset var
     unset SOME_UNSETVAR
-    envp.append SOME_UNSETVAR /usr/dinosaur
+    ksl::envAppend SOME_UNSETVAR /usr/dinosaur
     assert_equals "/usr/dinosaur" "${SOME_UNSETVAR}"
     unset SOME_UNSETVAR
 
     # test appending to existing var already with content
     SOME_PATHVAR="/usr/dinosaur"
-    envp.append SOME_PATHVAR /usr/phylum
+    ksl::envAppend SOME_PATHVAR /usr/phylum
     assert_equals "/usr/dinosaur:/usr/phylum" "${SOME_PATHVAR}"
 
     # test appending to existing var with trailing colon
     SOME_PATHVAR="/usr/dinosaur:"
-    envp.append SOME_PATHVAR /usr/phylum
+    ksl::envAppend SOME_PATHVAR /usr/phylum
     assert_equals "/usr/dinosaur:/usr/phylum" "${SOME_PATHVAR}"
 
     # test appending to existing var with duplicate front content
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
-    envp.append SOME_PATHVAR /usr/dinosaur
+    ksl::envAppend SOME_PATHVAR /usr/dinosaur
     assert_equals "/usr/dinosaur:/usr/phylum" "${SOME_PATHVAR}"
 
     # test appending to existing var with duplicate end content
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
-    envp.append SOME_PATHVAR /usr/phylum
+    ksl::envAppend SOME_PATHVAR /usr/phylum
     assert_equals "/usr/dinosaur:/usr/phylum" "${SOME_PATHVAR}"
 
     # test appending to existing var with extra ":" in content
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
-    envp.append SOME_PATHVAR ":/usr/games:"
+    ksl::envAppend SOME_PATHVAR ":/usr/games:"
     assert_equals "/usr/dinosaur:/usr/phylum:/usr/games" "${SOME_PATHVAR}"
 
     # test appending with must-have existing file, the true at end
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
     touch /tmp/envtest.bash
-    envp.append SOME_PATHVAR "/tmp/envtest.bash" "true"
+    ksl::envAppend SOME_PATHVAR "/tmp/envtest.bash" "true"
     assert_equals "/usr/dinosaur:/usr/phylum:/tmp/envtest.bash" "${SOME_PATHVAR}"
     rm /tmp/envtest.bash
 
     # test appending with must-have existing file, the true at end
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
     rm -f /tmp/envtest.bash # ensure not there. Append should be an error
-    envp.append SOME_PATHVAR "/tmp/envtest.bash" "true"
-    assert_fails "envp.append SOME_PATHVAR '/tmp/envtest.bash' 'true'"
+    ksl::envAppend SOME_PATHVAR "/tmp/envtest.bash" "true"
+    assert_fails "ksl::envAppend SOME_PATHVAR '/tmp/envtest.bash' 'true'"
 }
 
 # -----------------------------------------------------------
 
-test_env.prepend()
+test_envPrepend()
 {
     # test insufficient args - no args
-    assert_fails "envp.prepend"
+    assert_fails "ksl::envPrepend"
 
     # test insufficient args - 1 arg
-    assert_fails "envp.prepend '/usr/dinosaur'"
+    assert_fails "ksl::envPrepend '/usr/dinosaur'"
 
     # test two empty args
-    assert_fails "envp.prepend '' ''"
+    assert_fails "ksl::envPrepend '' ''"
 
     # test empty args
-    assert_fails "envp.prepend '/usr/dinosaur' ''"
+    assert_fails "ksl::envPrepend '/usr/dinosaur' ''"
 
     # test empty args
-    assert_fails "envp.prepend '' '/usr/dinosaur'"
+    assert_fails "ksl::envPrepend '' '/usr/dinosaur'"
 
     # test prepending to an unset var
     unset SOME_UNSETVAR
-    envp.prepend SOME_UNSETVAR /usr/dinosaur
+    ksl::envPrepend SOME_UNSETVAR /usr/dinosaur
     assert_equals "/usr/dinosaur" "${SOME_UNSETVAR}"
     unset SOME_UNSETVAR
 
     # test prepending to existing var already with content
     SOME_PATHVAR="/usr/dinosaur"
-    envp.prepend SOME_PATHVAR /usr/phylum
+    ksl::envPrepend SOME_PATHVAR /usr/phylum
     assert_equals "/usr/phylum:/usr/dinosaur" "${SOME_PATHVAR}"
 
     # test prepending to existing var with trailing colon
     SOME_PATHVAR="/usr/dinosaur:"
-    envp.prepend SOME_PATHVAR /usr/phylum
+    ksl::envPrepend SOME_PATHVAR /usr/phylum
     assert_equals "/usr/phylum:/usr/dinosaur" "${SOME_PATHVAR}"
 
     # test prepending to existing var with duplicate front content
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
-    envp.prepend  SOME_PATHVAR /usr/dinosaur
+    ksl::envPrepend  SOME_PATHVAR /usr/dinosaur
     assert_equals "/usr/dinosaur:/usr/phylum" "${SOME_PATHVAR}"
 
     # test prepending to existing var with duplicate end content
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
-    envp.prepend SOME_PATHVAR /usr/phylum
+    ksl::envPrepend SOME_PATHVAR /usr/phylum
     assert_equals "/usr/dinosaur:/usr/phylum" "${SOME_PATHVAR}"
 
     # test prepending to existing var with extra ":" in content
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
-    envp.prepend SOME_PATHVAR ":/usr/games:"
+    ksl::envPrepend SOME_PATHVAR ":/usr/games:"
     assert_equals "/usr/games:/usr/dinosaur:/usr/phylum" "${SOME_PATHVAR}"
 
     # test prepending with must-have existing file, the true at end
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
     touch /tmp/envtest.bash
-    envp.prepend SOME_PATHVAR "/tmp/envtest.bash" "true"
+    ksl::envPrepend SOME_PATHVAR "/tmp/envtest.bash" "true"
     assert_equals "/tmp/envtest.bash:/usr/dinosaur:/usr/phylum" "${SOME_PATHVAR}"
     rm /tmp/envtest.bash
 
     # test prepending with must-have existing file, the true at end
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
     rm -f /tmp/envtest.bash # ensure not there. Prepend should be an error
-    envp.prepend SOME_PATHVAR "/tmp/envtest.bash" "true"
-    assert_fails "envp.prepend SOME_PATHVAR '/tmp/envtest.bash' 'true'"
+    ksl::envPrepend SOME_PATHVAR "/tmp/envtest.bash" "true"
+    assert_fails "ksl::envPrepend SOME_PATHVAR '/tmp/envtest.bash' 'true'"
 }
 
 # -----------------------------------------------------------
 
-test_envp.delete()
+test_envDelete()
 {
     # test insufficient args - no args
-    assert_fails "envp.delete"
+    assert_fails "ksl::envDelete"
 
     # test insufficient args - 1 arg
-    assert_fails "envp.delete '/usr/dinosaur'"
+    assert_fails "ksl::envDelete '/usr/dinosaur'"
 
     # test two empty args
-    assert_fails "envp.delete '' ''"
+    assert_fails "ksl::envDelete '' ''"
 
     # test empty args
-    assert_fails "envp.delete '/usr/dinosaur' ''"
+    assert_fails "ksl::envDelete '/usr/dinosaur' ''"
 
     # test empty args
-    assert_fails "envp.delete '' '/usr/dinosaur'"
+    assert_fails "ksl::envDelete '' '/usr/dinosaur'"
 
     # test deleting from an unset var
     unset SOME_UNSETVAR
-    envp.delete SOME_UNSETVAR /usr/dinosaur
+    ksl::envDelete SOME_UNSETVAR /usr/dinosaur
     assert_equals "" "${SOME_UNSETVAR}"
     unset SOME_UNSETVAR
 
     # test deleting from existing var no matching content
     SOME_PATHVAR="/usr/dinosaur"
-    envp.delete SOME_PATHVAR /usr/gabage
+    ksl::envDelete SOME_PATHVAR /usr/gabage
     assert_equals "/usr/dinosaur" "${SOME_PATHVAR}"
 
     # test deleting from existing var matching content
     SOME_PATHVAR="/usr/dinosaur"
-    envp.delete SOME_PATHVAR /usr/dinosaur
+    ksl::envDelete SOME_PATHVAR /usr/dinosaur
     assert_equals "" "${SOME_PATHVAR}"
 
     # test deleting from existing var with trailing colon
     SOME_PATHVAR="/usr/dinosaur:"
-    envp.delete SOME_PATHVAR /usr/dinosaur
+    ksl::envDelete SOME_PATHVAR /usr/dinosaur
     assert_equals "" "${SOME_PATHVAR}"
 
     # test deleting from var at front
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum:/usr/games"
-    envp.delete SOME_PATHVAR /usr/dinosaur
+    ksl::envDelete SOME_PATHVAR /usr/dinosaur
     assert_equals "/usr/phylum:/usr/games" "${SOME_PATHVAR}"
 
     # test deleting from var in middle
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum:/usr/games"
-    envp.delete SOME_PATHVAR /usr/phylum
+    ksl::envDelete SOME_PATHVAR /usr/phylum
     assert_equals "/usr/dinosaur:/usr/games" "${SOME_PATHVAR}"
 
     # test deleting from var at end
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum:/usr/games"
-    envp.delete  SOME_PATHVAR /usr/games
+    ksl::envDelete  SOME_PATHVAR /usr/games
     assert_equals "/usr/dinosaur:/usr/phylum" "${SOME_PATHVAR}"
 
     # test deleting from existing var with extra ":" in content
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum:/usr/games"
-    envp.delete SOME_PATHVAR ":/usr/phylum:"
+    ksl::envDelete SOME_PATHVAR ":/usr/phylum:"
     assert_equals "/usr/dinosaur:/usr/games" "${SOME_PATHVAR}"
 }
 
 # -----------------------------------------------------------
 
-test_envp.deleteFirst()
+test_ksl::envDeleteFirst()
 {
     # test insufficient args - no args
-    assert_fails "envp.deleteFirst"
+    assert_fails "ksl::envDeleteFirst"
 
     # test empty args
-    assert_fails "envp.deleteFirst ''"
+    assert_fails "ksl::envDeleteFirst ''"
 
     # test deleting from an unset var
     unset SOME_UNSETVAR
-    envp.deleteFirst SOME_UNSETVAR
+    ksl::envDeleteFirst SOME_UNSETVAR
     assert_equals "" "${SOME_UNSETVAR}"
     unset SOME_UNSETVAR
 
     # test deleting from existing but empty var
     SOME_PATHVAR=""
-    envp.deleteFirst SOME_PATHVAR
+    ksl::envDeleteFirst SOME_PATHVAR
     assert_equals "" "${SOME_PATHVAR}"
 
     # test deleting first fragment leaving empty string
     SOME_PATHVAR="/usr/dinosaur"
-    envp.deleteFirst SOME_PATHVAR
+    ksl::envDeleteFirst SOME_PATHVAR
     assert_equals "" "${SOME_PATHVAR}"
 
     # test deleting first fragment with multiple entries
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum:/usr/games"
-    envp.deleteFirst SOME_PATHVAR
+    ksl::envDeleteFirst SOME_PATHVAR
     assert_equals "/usr/phylum:/usr/games" "${SOME_PATHVAR}"
 }
 
 # -----------------------------------------------------------
 
-test_envp.deleteLast()
+test_ksl::envDeleteLast()
 {
     # test insufficient args - no args
-    assert_fails "envp.deleteLast"
+    assert_fails "ksl::envDeleteLast"
 
     # test empty args
-    assert_fails "envp.deleteFirst ''"
+    assert_fails "ksl::envDeleteFirst ''"
 
     # test deleting from an unset var
     unset SOME_UNSETVAR
-    envp.deleteLast SOME_UNSETVAR
+    ksl::envDeleteLast SOME_UNSETVAR
     assert_equals "" "${SOME_UNSETVAR}"
     unset SOME_UNSETVAR
 
     # test deleting from existing but empty var
     SOME_PATHVAR=""
-    envp.deleteLast SOME_PATHVAR
+    ksl::envDeleteLast SOME_PATHVAR
     assert_equals "" "${SOME_PATHVAR}"
 
     # test deleting last fragment leaving empty string
     SOME_PATHVAR="/usr/dinosaur"
-    envp.deleteLast SOME_PATHVAR
+    ksl::envDeleteLast SOME_PATHVAR
     assert_equals "" "${SOME_PATHVAR}"
 
     # test deleting Last fragment with multiple entries
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum:/usr/games"
-    envp.deleteLast SOME_PATHVAR
+    ksl::envDeleteLast SOME_PATHVAR
     assert_equals "/usr/dinosaur:/usr/phylum" "${SOME_PATHVAR}"
 }
 

@@ -69,7 +69,7 @@ main()
 
 # -----------------------------------------------------------
 #
-# After parsing command line, args are available as globals
+# After parsing command line, args are available as globals.
 #
 commandLine()
 {
@@ -229,12 +229,19 @@ processFiles()
 {
     SAVE_IFS="${IFS}"; IFS=":"
     for f in ${filesToProcess}; do
-        ksl::stdInfo "Processing file: \"${f}\""
-        if ${prettyPrint}; then
-            ksl::stdDebug "Pretty formatting file: ${f}"
-        fi
+        processOneFile ${f}
     done
     IFS="${SAVE_IFS}"
+}
+
+# -----------------------------------------------------------
+
+processOneFile()
+{
+    ksl::stdInfo "Processing file: \"${1}\""
+    if ${prettyPrint}; then
+        ksl::stdDebug "Using pretty formatting on file: ${f}"
+    fi
 }
 
 # -----------------------------------------------------------

@@ -4,34 +4,34 @@
 #
 # Contains the following:
 #
-#     strlen()
-#     strlenR()
-#     isEmpty()
-#     isEmptyR()
-#     startsWith()
-#     endsWith()
-#     trimRight()
-#     trimLeft()
-#     trimWhitespace()
-#     contains()
-#     toLower()
-#     toUpper()
-#     capitalize()
-#     isAlphNum()
-#     isAlpha()
-#     # isAscii()
-#     isBlank()
-#     isCntrl()
-#     isDigit()
-#     isGraph()
-#     isLower()
-#     isInteger()
-#     isPrint()
-#     isPunct()
-#     isSpace()
-#     isUpper()
-#     # isWord()
-#     isXdigit()
+#     ksl::strlen()
+#     ksl::strlenR()
+#     ksl::isEmpty()
+#     ksl::isEmptyR()
+#     ksl::startsWith()
+#     ksl::endsWith()
+#     ksl::trimRight()
+#     ksl::trimLeft()
+#     ksl::trimWhitespace()
+#     ksl::contains()
+#     ksl::toLower()
+#     ksl::toUpper()
+#     ksl::capitalize()
+#     ksl::isAlphNum()
+#     ksl::isAlpha()
+#     ksl::# isAscii()
+#     ksl::isBlank()
+#     ksl::isCntrl()
+#     ksl::isDigit()
+#     ksl::isGraph()
+#     ksl::isLower()
+#     ksl::isInteger()
+#     ksl::isPrint()
+#     ksl::isPunct()
+#     ksl::isSpace()
+#     ksl::isUpper()
+#     ksl::# isWord()
+#     ksl::isXdigit()
 #
 # -----------------------------------------------------------
 
@@ -166,7 +166,7 @@ ksl::trimWhitespace()
 
 # -----------------------------------------------------------
 #
-# Returns true if $1 string contains string in $2
+# Returns true if $1 string contains the string in $2.
 #
 ksl::contains()
 {
@@ -176,7 +176,7 @@ ksl::contains()
 
 # -----------------------------------------------------------
 #
-# Return copy of $1 string converted to lower case
+# Return copy of $1 string converted to lower case.
 #
 ksl::toLower()
 {
