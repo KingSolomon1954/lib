@@ -109,33 +109,38 @@ test_envAppend()
     ksl::envAppend SOME_PATHVAR /usr/phylum
     assert_equals "/usr/dinosaur:/usr/phylum" "${SOME_PATHVAR}"
 
-    # test appending to existing var with duplicate front content
+    # test appending disallowed duplicate front content
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
     ksl::envAppend SOME_PATHVAR /usr/dinosaur
     assert_equals "/usr/dinosaur:/usr/phylum" "${SOME_PATHVAR}"
 
-    # test appending to existing var with duplicate end content
+    # test appending disallowed duplicate end content
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
     ksl::envAppend SOME_PATHVAR /usr/phylum
     assert_equals "/usr/dinosaur:/usr/phylum" "${SOME_PATHVAR}"
+
+    # test appending allowing duplicates
+    SOME_PATHVAR="/usr/bin:/usr/local"
+    ksl::envAppend -a SOME_PATHVAR /usr/local
+    assert_equals "/usr/bin:/usr/local:/usr/local" "${SOME_PATHVAR}"
 
     # test appending to existing var with extra ":" in content
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
     ksl::envAppend SOME_PATHVAR ":/usr/games:"
     assert_equals "/usr/dinosaur:/usr/phylum:/usr/games" "${SOME_PATHVAR}"
 
-    # test appending with must-have existing file, the true at end
+    # test appending with file check existance
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
     touch /tmp/envtest.bash
-    ksl::envAppend SOME_PATHVAR "/tmp/envtest.bash" "true"
+    ksl::envAppend SOME_PATHVAR -f /tmp/envtest.bash
     assert_equals "/usr/dinosaur:/usr/phylum:/tmp/envtest.bash" "${SOME_PATHVAR}"
     rm /tmp/envtest.bash
 
-    # test appending with must-have existing file, the true at end
+    # test appending with file check existence, but file doesn't exist
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
-    rm -f /tmp/envtest.bash # ensure not there. Append should be an error
-    ksl::envAppend SOME_PATHVAR "/tmp/envtest.bash" "true"
-    assert_fails "ksl::envAppend SOME_PATHVAR '/tmp/envtest.bash' 'true'"
+    rm -f /tmp/envtest.bash # ensure not there
+    ksl::envAppend -f SOME_PATHVAR /tmp/envtest.bash
+    assert_equals "/usr/dinosaur:/usr/phylum" "${SOME_PATHVAR}"
 }
 
 # -----------------------------------------------------------
@@ -173,33 +178,38 @@ test_envPrepend()
     ksl::envPrepend SOME_PATHVAR /usr/phylum
     assert_equals "/usr/phylum:/usr/dinosaur" "${SOME_PATHVAR}"
 
-    # test prepending to existing var with duplicate front content
+    # test appending disallowed duplicate front content
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
     ksl::envPrepend  SOME_PATHVAR /usr/dinosaur
     assert_equals "/usr/dinosaur:/usr/phylum" "${SOME_PATHVAR}"
 
-    # test prepending to existing var with duplicate end content
+    # test appending disallowed duplicate end content
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
     ksl::envPrepend SOME_PATHVAR /usr/phylum
     assert_equals "/usr/dinosaur:/usr/phylum" "${SOME_PATHVAR}"
+
+    # test prepending allowing duplicates
+    SOME_PATHVAR="/usr/bin:/usr/local"
+    ksl::envPrepend -a SOME_PATHVAR /usr/local
+    assert_equals "/usr/local:/usr/bin:/usr/local" "${SOME_PATHVAR}"
 
     # test prepending to existing var with extra ":" in content
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
     ksl::envPrepend SOME_PATHVAR ":/usr/games:"
     assert_equals "/usr/games:/usr/dinosaur:/usr/phylum" "${SOME_PATHVAR}"
 
-    # test prepending with must-have existing file, the true at end
+    # test appending with file check existance
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
     touch /tmp/envtest.bash
-    ksl::envPrepend SOME_PATHVAR "/tmp/envtest.bash" "true"
+    ksl::envPrepend SOME_PATHVAR -f /tmp/envtest.bash
     assert_equals "/tmp/envtest.bash:/usr/dinosaur:/usr/phylum" "${SOME_PATHVAR}"
     rm /tmp/envtest.bash
 
-    # test prepending with must-have existing file, the true at end
+    # test prepending with file check existence, but file doesn't exist
     SOME_PATHVAR="/usr/dinosaur:/usr/phylum"
-    rm -f /tmp/envtest.bash # ensure not there. Prepend should be an error
-    ksl::envPrepend SOME_PATHVAR "/tmp/envtest.bash" "true"
-    assert_fails "ksl::envPrepend SOME_PATHVAR '/tmp/envtest.bash' 'true'"
+    rm -f /tmp/envtest.bash # ensure not there
+    ksl::envPrepend SOME_PATHVAR -f /tmp/envtest.bash
+    assert_equals "/usr/dinosaur:/usr/phylum" "${SOME_PATHVAR}"
 }
 
 # -----------------------------------------------------------

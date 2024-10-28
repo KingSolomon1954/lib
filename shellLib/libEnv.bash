@@ -1,19 +1,22 @@
+# -------------------------------------------------------
+#
 # Functions to manipulate shell environment PATH like variables
 # with entries separated by ":" such as MANPATH and PATH itself.
 #
-# Normally these variables contain directory paths but they don't
-# have to. Between each path element is a separator character,
-# normally a colon ":" but this can be changed by setting evpSep.
+# Often these variables contain directory paths but they don't have to,
+# for example HISTCONTROL. Between each path element is a separator
+# character, normally a colon ":" but this can be changed by setting
+# evpSep.
 #
 # Contains the following:
 #
-#     ksl::envContains(PATH dir [true/false])
-#     ksl::envAppend  (PATH dir [true/false])
-#     ksl::envPrepend (PATH dir [true/false])
-#     ksl::envDelete  (PATH dir [true/false])
-#     ksl::envDeleteFirst(PATH)
-#     ksl::envDeleteLast(PATH)
-#     ksl::envSetSeparator(char [true/false])
+#     ksl::envContains()
+#     ksl::envAppend()
+#     ksl::envPrepend()
+#     ksl::envDelete()
+#     ksl::envDeleteFirst()
+#     ksl::envDeleteLast()
+#     ksl::envSetSeparator()
 #
 # -----------------------------------------------------------
 
@@ -31,12 +34,11 @@ envSep=":"
 #
 # This is slightly different than just looking for a contained
 # string as with ksl:contains(). Here the string to look for
-# must exactly match and fill out to the surrounding ":" markers.
+# must exactly match between the surrounding ":" markers.
 #
-# Returns 0 (success) if found otherwise 1 (fail).
-# $1 is the name of a path style variable and passed by value
-# $2 is the string to look for
-# expecting ":" separatng individual elements.
+# Returns 0 (success) if found otherwise 1 (not found).
+# $1 is the name of a path style variable and passed by value.
+# $2 is the element to look for.
 #
 # Example:
 #     if ksl::envContains PATH "/usr/bin"; then
@@ -65,60 +67,135 @@ ksl::envContains()
 
 # -----------------------------------------------------------
 #
-# Append $2 to $1, in-place, provided $2 is not already in the
-# path variable. $1 is the name of a path style variable with
-# ":" separating individual elements.
+# Add $2 <element>, in-place, to the end of $1 <path variable>, 
+# provided <element> is not already in the <path variable>. 
+# The <path variable> is the name of a path style variable, 
+# such as PATH, with ":" separating individual elements.
 #
-# If $3 is supplied and true, then the $2 fragment is treated as a
-# filename and must must exist on the file space. If the the filename
-# does not actually exist, then nothing is appended and this function
-# returns false. If $3 is absent or false then, $2 is appended without
-# checking for existance and returns true.
+#     Example: ksl::envAppend MANPATH $HOME/man
+#     Example: ksl::envAppend -r -f MANPATH $HOME/man
+#
+# SYNOPSIS
+#     ksl::envAppend [options] PATH_VARIABLE ELEMENT
+#
+# OPTIONS
+#     -a|-allow-dups
+#     -r|-reject-dups (default)
+#     -s|-add-as-string (default)
+#     -f|-file-must-exist
+#
+# OPTIONS DESCRIPTION
+#    -a | -allow-dups: Add to PATH_VARIABLE even if
+#        ELEMENT is already in there. 
+#    -r | -reject-dups: (default) Don't add to
+#        PATH_VARIABLE if ELEMENT is already in there.
+#    -s | -add-as-string: (default) Add ELEMENT to the
+#        PATH_VARIABLE as a string, subject to duplicates setting.
+#    -f | -file-must-exist: Add ELEMENT, treated as a file/directory,
+#        to the PATH_VARIABLE, but only if ELEMENT already exists
+#        on the file space, subject to the duplicates setting.
+#
+#       If both -s and -f are given, last one wins.
+#       If both -a and -r are given, last one wins.
+#
+# Returns true if element was appended, otherwise false.
+#
+# -----------------------------------------------------------
 
-# Example: ksl::envAppend MANPATH $HOME/man true
-#
-# Returns true if something was appended, otherwise false.
-#
 ksl::envAppend()
 {
-    [ -z $1 ] || [ -z "$2" ] && return 1 # no args, nothing appended
-    local mustExist=${3:-"false"}
-    if ksl::envContains $1 "$2"; then return 1; fi  # Already there, no action
-    [ "${mustExist}" == "true" ] && [ ! -f "$2" -a ! -d "$2" ] && return 1
-    local -n ref=$1
-    ref="${ref}${envSep}$2"
-    ksl::_envColonTrimPath $1
+    ksl::_envXxpend --append $*
 }
 
 # -----------------------------------------------------------
 #
-# Prepend $2 to $1, in-place, provided $2 is not already in the
-# path variable. $1 is the name of a path style variable with 
-# ":" separating individual elements.
+# Add $2 <element>, in-place, to the front of $1 <path variable>, 
+# provided <element> is not already in the <path variable>. 
+# The <path variable> is the name of a path style variable, 
+# such as PATH, with ":" separating individual elements.
 #
-# If $3 is supplied and true, then the $2 fragment is treated as a
-# filename and must must exist on the file space. If the the filename
-# does not actually exist, then nothing is prepended and this function
-# returns false. If $3 is absent or false then, $2 is prepended without
-# checking for existance and returns true.
-#
-# Example: ksl::envPrepend MANPATH $HOME/man true
+# Takes exact same args and description as envAppend above.
 #
 ksl::envPrepend()
 {
-    [ -z $1 ] || [ -z "$2" ] && return 1 # no args, nothing appended
-    local mustExist=${3:-"false"}
-    if ksl::envContains $1 "$2"; then return 1; fi  # Already there, no action
-    [ "${mustExist}" == "true" ] && [ ! -f "$2" -a ! -d "$2" ] && return 1
-    local -n ref=$1
-    ref="$2${envSep}${ref}"
-    ksl::_envColonTrimPath $1
+    ksl::_envXxpend --prepend $*
 }
 
 # -----------------------------------------------------------
 #
-# Delete $1, in-place, from $2. $2 is the name of a path style
-# variable with ":" separating individual elements.
+# Shared function between envAppend and envPrepend to extract function
+# arguments and perform the processing.  There is only one line
+# difference between appending and prepending.
+#
+ksl::_envXxpend()
+{
+    local allowDups=false
+    local mustExist=false
+    local append=true
+    local args=
+    local -i argCount=0
+    while [ $# -ne 0 ]; do
+        case $1 in
+            -a|--allow-dups)      allowDups=true;;
+            -r|--reject-dups)     allowDups=false;;
+            -s|--add-as-string)   mustExist=false;;
+            -f|--file-must-exist) mustExist=true;;
+            --append)             append=true;;
+            --prepend)            append=false;;
+            -*) echo "Invalid option \"$1\" for envAppend() or envPrepend()" 1>&2
+                return 1;;
+            *) local val=${1//${envSep}/}  # strip any leading/trailing ":"
+                if [ -n "${args}" ]; then
+                   args="${args}${envSep}${val}"; (( argCount++ ))
+               else
+                   args="${val}"; (( argCount++ ))
+               fi ;;
+        esac
+        shift
+    done
+
+    # Must have the two required args (PATH_VARIABLE and ELEMENT)
+    if [ ${argCount} -lt 2 ]; then
+        echo -n "ksl::envXxpend(): requires two arguments, " 1>&2
+        echo    "got only ${argCount}: \"${args}\"" 1>&2
+        return 1
+    fi
+    
+    local varName=${args%%:*}
+    local element=${args##*:}
+    
+    # echo "allowDups: ${allowDups}"
+    # echo "mustExist: ${mustExist}"
+    # echo "     args: $args"
+    # echo "  varName: ${varName}"
+    # echo "  element: ${element}"
+    
+    [ -z ${varName} ] || [ -z "${element}" ] && return 1 # missing args
+
+    if ! ${allowDups}; then
+        if ksl::envContains ${varName} "${element}"; then
+            return 1;
+        fi
+    fi
+
+    if ${mustExist}; then
+        [ ! -f "${element}" -a ! -d "${element}" ] && return 1
+    fi
+
+    local -n ref="${varName}"
+    if ${append}; then
+        ref="${ref}${envSep}${element}"
+    else
+        ref="${element}${envSep}${ref}"
+    fi
+    ksl::_envColonTrimPath "${varName}"
+    return 0
+}
+
+# -----------------------------------------------------------
+#
+# Delete all occurrence of $1, in-place, from $2. $2 is the name of a
+# path style variable with ":" separating individual elements.
 #
 # Example: ksl::envDelete MANPATH "$HOME/man"
 #
@@ -181,8 +258,15 @@ ksl::_envColonTrimPath ()
 {
     local -n ref=${1}
     ref=${ref//${envSep}${envSep}/${envSep}}  # Clean up double colons
-    ref=${ref#${envSep}}      # Clean up first colon
-    ref=${ref%${envSep}}      # Clean up trailing colon
+    ref=${ref#${envSep}}                      # Clean up first colon
+    ref=${ref%${envSep}}                      # Clean up trailing colon
+}
+
+# -----------------------------------------------------------
+
+ksl::envSetSeparator()
+{
+    envSep=$1
 }
 
 # -----------------------------------------------------------
