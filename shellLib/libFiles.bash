@@ -12,16 +12,16 @@
 # -----------------------------------------------------------
 
 # Avoid double inclusion
-[[ -v libFilesImported ]] && [[ ! -v importForce ]] && return 0
-libFilesImported=1
+[ -v libFilesImported ] && [ ! -v importForce ] && return
+libFilesImported=0
 
 # -----------------------------------------------------------
 
 ksl::baseName ()
 {
-    local s="${1:-}"
+    local s="${1}"    
     s="${s%/}"
-    echo ${s##*/}
+    echo -n ${s##*/}
 }
 
 # -----------------------------------------------------------
@@ -48,7 +48,7 @@ ksl::dirName ()
         tmp2=.
     fi
 
-    echo ${tmp2}
+    echo -n ${tmp2}
 }
 
 # -----------------------------------------------------------
@@ -65,7 +65,7 @@ ksl::scriptDir()
 {
     # Note that there is no promise that $0 will work in all cases.
     # Refer to web discussions regarding finding script location.
-    echo $(cd "$(ksl::dirName $0)" && pwd)
+    echo -n $(cd "$(ksl::dirName $0)" && pwd)
 }
 
 # -----------------------------------------------------------
@@ -80,7 +80,27 @@ ksl::scriptDir()
 #
 ksl::scriptName()
 {
-    echo $(ksl::baseName "$0")
+    echo -n $(ksl::baseName "$0")
+}
+
+# -----------------------------------------------------------
+#
+# Extract the file name suffix - the last '.' and following
+# characters. This conforms to the Makefile $(suffix ...) command.
+#
+ksl::suffix()
+{
+    local path=${1}
+    [[ $path != *\.* ]]    && echo '' && return   # no "." anywhere
+    [[ $path =~ ^\.\/+$ ]] && echo '' && return   # . slashes not a suffix
+    
+    local t=".${path##*.}"
+    
+    # After isolating the suffix, correct for bad input like
+    # "/music/../beatles", which results in "./beatles" which 
+    # of course is not a suffix. Easier to correct after.
+    [[ $t =~ ^\.\/.*$ ]] && echo '' && return
+    echo -n "$t"
 }
 
 # -----------------------------------------------------------

@@ -9,8 +9,8 @@
 # -----------------------------------------------------------
 
 # Avoid double inclusion
-[[ -v libColorImported ]] && [[ ! -v importForce ]] && return 0
-libColorImported=1
+[ -v libColorImported ] && [ ! -v importForce ] && return
+libColorImported=0
 
 ESC="\033"
 FG="${ESC}[38;5;0;"

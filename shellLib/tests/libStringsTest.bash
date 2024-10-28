@@ -39,6 +39,82 @@ test_isEmpty()
     assert "ksl::isEmptyR 'DINO' "
 }
 
+test_startsWith()
+{
+    assert "ksl::startsWith 'rolling thunder' 'rolling'"
+    assert_fails "ksl::startsWith 'rolling thunder' 'thunder'"
+    assert_fails "ksl::startsWith 'rolling thunder' ''"
+    assert_fails "ksl::startsWith '' 'thunder'"
+    assert_fails "ksl::startsWith '' ''"
+    assert_fails "ksl::startsWith"
+}
+
+test_endsWith()
+{
+    assert "ksl::endsWith 'rolling thunder' 'thunder'"
+    assert_fails "ksl::endsWith 'rolling thunder' 'rolling'"
+    assert_fails "ksl::endsWith 'rolling thunder' ''"
+    assert_fails "ksl::endsWith '' 'thunder'"
+    assert_fails "ksl::endsWith '' ''"
+    assert_fails "ksl::endsWith"
+}
+
+test_toLower()
+{
+    assert_equals "rolling thunder" "$(ksl::toLower 'ROLLING Thunder')"
+    assert_equals "rolling thunder" "$(ksl::toLower 'rolling thunder')"
+    assert_equals "" "$(ksl::toLower '')"
+}
+
+test_toUpper()
+{
+    assert_equals "ROLLING THUNDER" "$(ksl::toUpper 'rolling thunder')"
+    assert_equals "ROLLING THUNDER" "$(ksl::toUpper 'ROLLING THUNDER')"
+    assert_equals "" "$(ksl::toUpper '')"
+}
+
+test_capitalize()
+{
+    assert_equals "Rolling Thunder" "$(ksl::capitalize 'rolling Thunder')"
+    assert_equals "Rolling thunder" "$(ksl::capitalize 'Rolling thunder')"
+    assert_equals "" "$(ksl::capitalize '')"
+}
+
+test_trimLeft()
+{
+    assert_equals " Rolling Thunder" "$(ksl::trimLeft 'aabbcc Rolling Thunder' 'aabbcc')"
+    assert_equals "Rolling Thunder"  "$(ksl::trimLeft '      Rolling Thunder')"
+    assert_equals "Rolling Thunder"  "$(ksl::trimLeft 'Rolling Thunder' 'no-match')"
+}
+
+test_trimRight()
+{
+    assert_equals "Rolling Thunder " "$(ksl::trimRight 'Rolling Thunder aabbcc' 'aabbcc')"
+    assert_equals "Rolling Thunder"  "$(ksl::trimRight 'Rolling Thunder      ')"
+    assert_equals "Rolling thunder"  "$(ksl::trimRight 'Rolling thunder' 'no-match')"
+}
+
+test_trimWhitespace()
+{
+    assert_equals "Rolling Thunder" "$(ksl::trimWhitespace '         Rolling Thunder         ')"
+    assert_equals "Rolling Thunder" "$(ksl::trimWhitespace '         Rolling Thunder')"
+    assert_equals "Rolling Thunder" "$(ksl::trimWhitespace 'Rolling Thunder          ')"
+    assert_equals "Rolling Thunder" "$(ksl::trimWhitespace 'Rolling Thunder')"
+}
+
+test_contains()
+{
+    assert "ksl::contains '0123456789' '123' "
+    assert "ksl::contains '0123456789' '5' "
+    assert "ksl::contains '55555' '5' "
+    assert_fails "ksl::contains '0123456789' '000' "
+    assert_fails "ksl::contains '0123456789' 'a' "
+    assert_fails "ksl::contains '0123456789' 'a' "
+    assert_fails "ksl::contains '0123456789' '' "
+    assert_fails "ksl::contains '' 'abc' "
+    assert_fails "ksl::contains '' '' "
+}
+
 test_isAlphNum()
 {
     assert "ksl::isAlphNum '12345' "
@@ -253,69 +329,6 @@ test_isXdigit()
     assert_fails "ksl::isXdigit 'I am Spartacus'"
     assert_fails "ksl::isXdigit '#%@'"
     assert_fails "ksl::isXdigit"
-}
-
-test_startsWith()
-{
-    assert "ksl::startsWith 'rolling thunder' 'rolling'"
-    assert_fails "ksl::startsWith 'rolling thunder' 'thunder'"
-    assert_fails "ksl::startsWith 'rolling thunder' ''"
-    assert_fails "ksl::startsWith '' 'thunder'"
-    assert_fails "ksl::startsWith '' ''"
-    assert_fails "ksl::startsWith"
-}
-
-test_endsWith()
-{
-    assert "ksl::endsWith 'rolling thunder' 'thunder'"
-    assert_fails "ksl::endsWith 'rolling thunder' 'rolling'"
-    assert_fails "ksl::endsWith 'rolling thunder' ''"
-    assert_fails "ksl::endsWith '' 'thunder'"
-    assert_fails "ksl::endsWith '' ''"
-    assert_fails "ksl::endsWith"
-}
-
-test_toLower()
-{
-    assert_equals "rolling thunder" "$(ksl::toLower 'ROLLING Thunder')"
-    assert_equals "rolling thunder" "$(ksl::toLower 'rolling thunder')"
-    assert_equals "" "$(ksl::toLower '')"
-}
-
-test_toUpper()
-{
-    assert_equals "ROLLING THUNDER" "$(ksl::toUpper 'rolling thunder')"
-    assert_equals "ROLLING THUNDER" "$(ksl::toUpper 'ROLLING THUNDER')"
-    assert_equals "" "$(ksl::toUpper '')"
-}
-
-test_capitalize()
-{
-    assert_equals "Rolling Thunder" "$(ksl::capitalize 'rolling Thunder')"
-    assert_equals "Rolling thunder" "$(ksl::capitalize 'Rolling thunder')"
-    assert_equals "" "$(ksl::capitalize '')"
-}
-
-test_trimLeft()
-{
-    assert_equals " Rolling Thunder" "$(ksl::trimLeft 'aabbcc Rolling Thunder' 'aabbcc')"
-    assert_equals "Rolling Thunder"  "$(ksl::trimLeft '      Rolling Thunder')"
-    assert_equals "Rolling Thunder"  "$(ksl::trimLeft 'Rolling Thunder' 'no-match')"
-}
-
-test_trimRight()
-{
-    assert_equals "Rolling Thunder " "$(ksl::trimRight 'Rolling Thunder aabbcc' 'aabbcc')"
-    assert_equals "Rolling Thunder"  "$(ksl::trimRight 'Rolling Thunder      ')"
-    assert_equals "Rolling thunder"  "$(ksl::trimRight 'Rolling thunder' 'no-match')"
-}
-
-test_trimWhitespace()
-{
-    assert_equals "Rolling Thunder" "$(ksl::trimWhitespace '         Rolling Thunder         ')"
-    assert_equals "Rolling Thunder" "$(ksl::trimWhitespace '         Rolling Thunder')"
-    assert_equals "Rolling Thunder" "$(ksl::trimWhitespace 'Rolling Thunder          ')"
-    assert_equals "Rolling Thunder" "$(ksl::trimWhitespace 'Rolling Thunder')"
 }
 
 # -----------------------------------------------------------

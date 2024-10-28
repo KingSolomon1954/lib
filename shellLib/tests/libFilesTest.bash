@@ -45,3 +45,39 @@ test_scriptName()
 }
 
 # -----------------------------------------------------------
+
+test_suffix()
+{
+    # echo
+    # echo "1 barrier$(ksl::suffix 'music')barrier"
+    # echo "2 barrier$(ksl::suffix 'music.')barrier"
+    # echo "3 barrier$(ksl::suffix '.music')barrier"
+    # echo "4 barrier$(ksl::suffix '.music.')barrier"
+    # echo "5 barrier$(ksl::suffix '../music.')barrier"
+    # echo "6 barrier$(ksl::suffix '.')barrier"
+    # echo "7 barrier$(ksl::suffix '')barrier"
+    # echo "8 barrier$(ksl::suffix './')barrier"
+    # echo "9 barrier$(ksl::suffix './//')barrier"
+    # echo "10 barrier$(ksl::suffix './.')barrier"
+    # echo "11 barrier$(ksl::suffix './music/album.flac')barrier"
+    # echo "12 barrier$(ksl::suffix '/music.flac')barrier"
+    # echo "13 barrier$(ksl::suffix 'music.country/../beatles')barrier"
+
+    assert_equals ""        "$(ksl::suffix 'music')"
+    assert_equals "."       "$(ksl::suffix 'music.')"
+    assert_equals ".music"  "$(ksl::suffix '.music')"
+    assert_equals "."       "$(ksl::suffix '.music.')"
+    assert_equals "."       "$(ksl::suffix '../music.')"
+    assert_equals "."       "$(ksl::suffix '.')"
+    assert_equals ""        "$(ksl::suffix '')"
+    assert_equals ""        "$(ksl::suffix './')"
+    assert_equals ""        "$(ksl::suffix './//')"
+    assert_equals "."       "$(ksl::suffix './.')"
+    assert_equals ".flac"   "$(ksl::suffix './music/album.flac')"
+    assert_equals ".flac"   "$(ksl::suffix '/music.flac')"
+    assert_equals ""        "$(ksl::suffix 'music.country/../beatles')"
+}
+
+# -----------------------------------------------------------
+
+    

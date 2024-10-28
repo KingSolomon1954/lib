@@ -237,8 +237,7 @@ displayWithColor()
 
 processFiles()
 {
-    SAVE_IFS="${IFS}"
-    IFS=":"
+    SAVE_IFS="${IFS}"; IFS=":"
     for f in ${filesToProcess}; do
         ksl::stdInfo "Processing file: \"${f}\""
         if [ "${prettyPrint}" == "yes" ]; then

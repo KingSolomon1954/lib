@@ -8,6 +8,15 @@
 #     strlenR()
 #     isEmpty()
 #     isEmptyR()
+#     startsWith()
+#     endsWith()
+#     trimRight()
+#     trimLeft()
+#     trimWhitespace()
+#     contains()
+#     toLower()
+#     toUpper()
+#     capitalize()
 #     isAlphNum()
 #     isAlpha()
 #     # isAscii()
@@ -23,20 +32,12 @@
 #     isUpper()
 #     # isWord()
 #     isXdigit()
-#     startsWith()
-#     endsWith()
-#     toLower()
-#     toUpper()
-#     capitalize()
-#     trimRight()
-#     trimLeft()
-#     trimWhitespace()
 #
 # -----------------------------------------------------------
 
 # Avoid double inclusion
-[[ -v libStringImported ]] && [[ ! -v importForce ]] && return 0
-libStringImported=1
+[ -v libStringImported ] && [ ! -v importForce ] && return
+libStringImported=0
 
 # -----------------------------------------------------------
 #
@@ -78,7 +79,7 @@ ksl::strlenR ()
 #
 ksl::isEmpty ()
 {
-    [ -z ${1:-} ]
+    [ -z ${1} ]
 }
 
 # -----------------------------------------------------------
@@ -95,6 +96,110 @@ ksl::isEmptyR ()
     [ -z ${1:-} ] && return     # empty or no arg
     local -nr s=$1
     [ ${#s} == 0 ]
+}
+
+# -----------------------------------------------------------
+#
+# Return true if $1 string starts with $2 string
+# digits.
+#
+ksl::startsWith()
+{
+    [ -z ${2} ] && return false
+    [[ $1 =~ ^"$2" ]]
+}
+
+# -----------------------------------------------------------
+#
+# Return true if $1 string ends with $2 string
+# digits.
+#
+ksl::endsWith()
+{
+    [ -z ${2} ] && return false
+    [[ $1 =~ "$2"$ ]]
+}
+
+# -----------------------------------------------------------
+#
+# Return copy of $1 with the matching string in $2 removed
+# from the front of $1. If $2 is not given then defaults to
+# removing whitespace. $2 argument is a prefix.
+#
+ksl::trimLeft()
+{
+    local s=${1}
+    if (( $# < 2 )); then
+      echo "${s#"${s%%[![:space:]]*}"}"
+    else
+      echo "${s##"$2"}"
+    fi
+}
+
+# -----------------------------------------------------------
+#
+# Return copy of $1 with the matching string in $2 removed
+# from the end of $1. If $2 is not given then defaults to
+# removing whitespace. $2 argument is a prefix.
+#
+ksl::trimRight()
+{
+    local s=${1}
+    if (( $# < 2 )); then
+        echo "${s%"${s##*[![:space:]]}"}"
+    else
+      echo "${s%%"$2"}"
+    fi
+}
+
+# -----------------------------------------------------------
+#
+# Return copy of $1 with the matching string in $2 removed
+# from the end of $1. If $2 is not given then defaults to
+# removing whitespace. $2 argument is a prefix.
+#
+ksl::trimWhitespace()
+{
+    local s=$(ksl::trimRight "${1}")
+    ksl::trimLeft "${s}"
+}
+
+# -----------------------------------------------------------
+#
+# Returns true if $1 string contains string in $2
+#
+ksl::contains()
+{
+    [ -z $2 ] && return false
+    [[ "$1" == *$2* ]]
+}
+
+# -----------------------------------------------------------
+#
+# Return copy of $1 string converted to lower case
+#
+ksl::toLower()
+{
+    echo "${1,,}"
+}
+
+# -----------------------------------------------------------
+#
+# Return copy of $1 string converted to upper case
+#
+ksl::toUpper()
+{
+    echo "${1^^}"
+}
+
+# -----------------------------------------------------------
+#
+# Return copy of $1 string with first character capitalized and
+# the rest left alone.
+#
+ksl::capitalize()
+{
+    echo "${1^}"
 }
 
 # -----------------------------------------------------------
@@ -282,103 +387,6 @@ ksl::isXdigit()
 {
     local pat='^[[:xdigit:]]+$'
     [[ ${1} =~ ${pat} ]]
-}
-
-# -----------------------------------------------------------
-#
-# Return true if $1 string starts with $2 string
-# digits.
-#
-ksl::startsWith()
-{
-    [ -z ${2:-} ] && return 1
-    [[ $1 =~ ^"$2" ]]
-}
-
-# -----------------------------------------------------------
-#
-# Return true if $1 string ends with $2 string
-# digits.
-#
-ksl::endsWith()
-{
-    [ -z ${2:-} ] && return 1
-    [[ $1 =~ "$2"$ ]]
-}
-
-# -----------------------------------------------------------
-#
-# Return copy of $1 string converted to lower case
-#
-ksl::toLower()
-{
-    local s=${1:-}
-    echo "${s,,}"
-}
-
-# -----------------------------------------------------------
-#
-# Return copy of $1 string converted to upper case
-#
-ksl::toUpper()
-{
-    local s=${1:-}
-    echo "${s^^}"
-}
-
-# -----------------------------------------------------------
-#
-# Return copy of $1 string with first character capitalized and
-# the rest left alone.
-#
-ksl::capitalize()
-{
-    local s=${1:-}
-    echo "${s^}"
-}
-
-# -----------------------------------------------------------
-#
-# Return copy of $1 with the matching string in $2 removed
-# from the front of $1. If $2 is not given then defaults to
-# removing whitespace. $2 argument is a prefix.
-#
-ksl::trimLeft()
-{
-    local s=${1:-}
-    if (( $# < 2 )); then
-      echo "${s#"${s%%[![:space:]]*}"}"
-    else
-      echo "${s##"$2"}"
-    fi
-}
-
-# -----------------------------------------------------------
-#
-# Return copy of $1 with the matching string in $2 removed
-# from the end of $1. If $2 is not given then defaults to
-# removing whitespace. $2 argument is a prefix.
-#
-ksl::trimRight()
-{
-    local s=${1:-}
-    if (( $# < 2 )); then
-        echo "${s%"${s##*[![:space:]]}"}"
-    else
-      echo "${s%%"$2"}"
-    fi
-}
-
-# -----------------------------------------------------------
-#
-# Return copy of $1 with the matching string in $2 removed
-# from the end of $1. If $2 is not given then defaults to
-# removing whitespace. $2 argument is a prefix.
-#
-ksl::trimWhitespace()
-{
-    local s=$(ksl::trimRight "${1:-}")
-    ksl::trimLeft "${s}"
 }
 
 # -----------------------------------------------------------

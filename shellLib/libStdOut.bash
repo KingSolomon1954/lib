@@ -14,8 +14,8 @@
 # -----------------------------------------------------------
 
 # Avoid double inclusion
-[[ -v libStdOutImported ]] && [[ ! -v importForce ]] && return 0
-libStdOutImported=1
+[ -v libStdOutImported ] && [ ! -v importForce ] && return
+libStdOutImported=0
 
 ksl::import libColors.bash
 
