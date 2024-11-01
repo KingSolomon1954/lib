@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+
+printArgs()
+{
+    echo "argCount: $#"
+    
+    echo "Using \$*:"
+    echo "String is broken into individual words:"
+    for a in $*; do
+        echo $a
+    done
+
+    echo
+    echo "Using \"\$*\":"
+    echo "Parameters are regarded as one long quoted string:"
+    for a in "$*"; do
+        echo $a
+    done
+    
+    echo
+    echo "Treats each element of \$@ as an unquoted string:"
+    echo "Using \$@:"
+    for a in $@; do
+        echo $a
+    done
+    
+    echo
+    echo "Treats each element of \"\$@\" as a quoted string:"
+    echo "Using \"\$@\":"
+    for a in "$@"; do
+        echo $a
+    done
+    
+}
+
+printArgs one two "three four"
+

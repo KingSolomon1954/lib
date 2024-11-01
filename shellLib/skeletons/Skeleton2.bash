@@ -52,6 +52,8 @@ prettyPrint=false
 demo=true
 filesToProcess=
 
+# set -o xtrace   # for debugging
+
 # -----------------------------------------------------------
 #
 # Main body of script.
